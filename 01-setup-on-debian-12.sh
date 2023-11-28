@@ -88,13 +88,14 @@ echo "alias rm='rm -i'" >> /etc/bash.bashrc
 echo "export EDITOR=vi" >> /etc/bash.bashrc
 echo "export HISTTIMEFORMAT=\"%y-%m-%d %T \" " >> /etc/bash.bashrc
 
-echo "PS1='\[\033[01;32m\]\u@$(hostname -f) \D{%Y-%m-%d-%H:%M:%S}:\w\$\[\033[00m\] '" >> /etc/bash.bashrc
+##echo "PS1='\[\033[01;32m\]\u@$(hostname -f) \D{%Y-%m-%d-%H:%M:%S}:\w\$\[\033[00m\] '" >> /etc/bash.bashrc
+echo "PS1='\[\e[1;32m\]\u@\h\[\e[m\]:\[\e[1;34m\]\w\[\e[m\]:\[\e[1;31m\]\$\[\e[m\] '" >> /etc/bash.bashrc
 export EDITOR=vi
 export HISTTIMEFORMAT="%y-%m-%d %T "
 #PS1="[\u@\h \D{%Y-%m-%d-%H:%M:%S}]#"
 #PS1='\[\033[01;32m\]\u@\H:\w\$\[\033[00m\] '
 #PS1='\[\033[01;32m\]\u@$(hostname -f):\w\$\[\033[00m\] '
-PS1='\[\033[01;32m\]\u@$(hostname -f) \D{%Y-%m-%d-%H:%M:%S}:\w\$\[\033[00m\] '
+#PS1='\[\033[01;32m\]\u@$(hostname -f) \D{%Y-%m-%d-%H:%M:%S}:\w\$\[\033[00m\] '
 
 
 #echo "export LC_CTYPE=en_US.UTF-8" >> /etc/bash.bashrc
