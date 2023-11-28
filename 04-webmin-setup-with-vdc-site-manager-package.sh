@@ -10,8 +10,12 @@ apt-get update
 apt-get -y install webmin
 #apt-get -y install webmin --install-recommends
 
-
+## copies all program of VDC
 /bin/cp -pR files/rootdir-webmin/* /
+mkdir -p /etc/webmin/vdcsitemanager/siteinfo
+mkdir -p /var/log/vdcsitemanager-logs
+## ssh key-gen
+ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -N ""
 
 ## change port from 10000 to 8383
 sed -i "s/10000/8383/g" /etc/webmin/miniserv.conf

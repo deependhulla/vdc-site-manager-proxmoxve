@@ -1,0 +1,17 @@
+
+Now Guide for VDC first Time Setup.
+
+
+Now setup one-time ssh-auto login to all site1 PVE & site2 PVE for autologin 
+from not only each other but also from this VDC VM.
+This for Inter Process and to trigger root process for data sync.
+-------------------------------------------------------------------------------
+
+* Login from All PVE Servers of Site1 Cluster to each server of Site2 Cluster PVE
+* Login from All PVE Servers of Site2 Cluster to each server of Site1 Cluster PVE
+* Login from VDC VM to each server of Site1 Cluster PVE
+* Login from VDC VM to each server of Site2 Cluster PVE
+
+#ssh-copy-id root@site1
+#ssh-copy-id root@site2
+
