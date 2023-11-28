@@ -86,6 +86,17 @@ echo "alias ls='ls --color=auto'" >> /etc/bash.bashrc
 echo "alias mv='mv -i'" >> /etc/bash.bashrc
 echo "alias rm='rm -i'" >> /etc/bash.bashrc
 echo "export EDITOR=vi" >> /etc/bash.bashrc
+echo "export HISTTIMEFORMAT=\"%y-%m-%d %T \" " >> /etc/bash.bashrc
+
+echo "PS1='\[\033[01;32m\]\u@$(hostname -f) \D{%Y-%m-%d-%H:%M:%S}:\w\$\[\033[00m\] '" >> /etc/bash.bashrc
+export EDITOR=vi
+export HISTTIMEFORMAT="%y-%m-%d %T "
+#PS1="[\u@\h \D{%Y-%m-%d-%H:%M:%S}]#"
+#PS1='\[\033[01;32m\]\u@\H:\w\$\[\033[00m\] '
+#PS1='\[\033[01;32m\]\u@$(hostname -f):\w\$\[\033[00m\] '
+PS1='\[\033[01;32m\]\u@$(hostname -f) \D{%Y-%m-%d-%H:%M:%S}:\w\$\[\033[00m\] '
+
+
 #echo "export LC_CTYPE=en_US.UTF-8" >> /etc/bash.bashrc
 #echo "export LC_ALL=en_US.UTF-8" >> /etc/bash.bashrc
 
