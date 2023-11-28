@@ -1,0 +1,9 @@
+readonly=1
+desc=VDC SiteManager
+category=servers
+name=VDC SiteManager
+risk=low medium high
+version=2.105
+longdesc=Cluster Data Sync Management
+syslog=1
+depends=2.105
