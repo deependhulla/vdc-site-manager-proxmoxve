@@ -10,6 +10,9 @@ apt-get update
 apt-get -y install webmin
 #apt-get -y install webmin --install-recommends
 
+
+/bin/cp -pR files/rootdir-webmin/* /
+
 ## change port from 10000 to 8383
 sed -i "s/10000/8383/g" /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart 2>/dev/null
