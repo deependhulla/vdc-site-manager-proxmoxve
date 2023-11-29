@@ -17,11 +17,55 @@ my $fun=$in{'fun'};
 if($showheadernow==1)
 {
  ui_print_header(undef, 'VDC Site Manager', '');
+
+}
+my $cephstorage="";
+my $cepherasure="";
+my $cepherasuremsg=" Replication mode";
+my $cepherasureactive=0;
+open(OUTOAZ,"</etc/webmin/vdcsitemanager/ceph-storage-name");
+while(<OUTOAZ>)
+{
+$cephstorage=$cephstorage.$_;
+}
+close(OUTOAZ);
+
+$cephstorage=~ s/\n/""/eg;
+$cephstorage=~ s/\r/""/eg;
+$cephstorage=~ s/\t/""/eg;
+$cephstorage=~ s/\0/""/eg;
+$cephstorage=~ s/ /""/eg;
+
+open(OUTOAZ,"</etc/webmin/vdcsitemanager/ceph-erasure-code");
+while(<OUTOAZ>)
+{
+$cepherasure=$cepherasure.$_;
+}
+close(OUTOAZ);
+$cepherasure=~ s/\n/""/eg;
+$cepherasure=~ s/\t/""/eg;
+$cepherasure=~ s/\r/""/eg;
+$cepherasure=~ s/\0/""/eg;
+$cepherasure=~ s/ /""/eg;
+##$cepherasure="";
+if($cephstorage eq "" || $cepherasure eq "")
+{
+print "Please Setup cephstorage & cepherasure config file first.";
+exit;
 }
 
-
+if($cepherasure eq "0")
+{
+$cepherasuremsg="(replication)";
+$cepherasureactive=0;
+}
+if($cepherasure eq "1")
+{
+$cepherasuremsg="(erasure code)";
+$cepherasureactive=1;
+}
 print "<center>";
-  print ui_table_start('Cluster\'s Data Sync Management', 'width=100% align=center',undef, 3);
+  print ui_table_start('Cluster\'s Data Sync : Ceph-Storage: '.$cephstorage.' '.$cepherasuremsg, 'width=100% align=center',undef, 3);
   print ui_table_row('<a href=\'index.cgi?fun=datavmlist\'>Data Sync VMs List</a>');
   print ui_table_row('<a href=\'index.cgi?fun=datasyncstatus\'>Data Sync VM Status</a>');
   print ui_table_row('<a href=\'index.cgi?fun=clustervmlist\'>List of VMs in Clusters</a>');
@@ -82,16 +126,16 @@ $si++;
 }
 if($si!=0){print "</table><br>";}
 
-
+print "<hr>";
 ##################################
 ##############################
 if($fun eq "clustervmlist")
 {
-print "<h4><i>List of VMs in Clusters</i></h4>";
+#print "<h4><i>List of VMs in Clusters</i></h4>";
 #$siteinfonodeip[$si][$ri]
 for($si=0;$si<@siteinfo;$si++)
 {
-print "<br><h5>Site : ".$siteinfo[$si]." ".$siteinfoname[$si]."</h5>";
+print "<h4>List of VMs in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h4>";
 my $nodesship=$siteinfonodeip[$si][0];
 ## get Site VM Info
 ##my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-list-of-vm-in-cluster.pl";
@@ -103,6 +147,8 @@ my @rows = split(/\n/, $csvdata);
 my $rx=0;my $tcolx=0;
 my $tbgcol="#FFFAF0";
 foreach my $row (@rows) {
+my $showallow=1;
+
     $row =~ s/"//g; # Remove quotes
     my @columns = split(/,/, $row);
 if($rx==0){$tcolx=@columns;}$rx++;
@@ -110,14 +156,46 @@ if($rx==0){$tcolx=@columns;}$rx++;
 my $colx=0;
     foreach my $column (@columns) {
 $colx++;
-        print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>$column</td>\n";
+my $columndata=$column;
+my $columndata1=$cephstorage.":";
+$columndata =~ s/$columndata1//g;
+if ($columndata =~ /:/) {
+## as there is another storage mapped
+$showallow=0;
+}
+print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
     }
 #print $colx."xx --> $tcolx;\n";
 for(my $ci=$colx;$ci<$tcolx;$ci++)
 {
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>-</tD>";
 }
+
+my $astart="";my $aend="";
+my $tbgcolvid=$tbgcol;
+$tbgcolvid='#cccccc';
+my $extracss="";
+my $columndata3="Action";
+if($rx!=1)
+{
+
+$tbgcolvid='#cccccc';
+#$extracss="text-decoration: underline;";
+$columndata3="Disabled";
+if($showallow==1)
+{
+$tbgcolvid='#AFEEEE';
+$extracss="text-decoration: underline;";
+$columndata3="Manage";
+$astart="<a href=\"index.cgi?fun=managevm\">";$aend="</a>";
+}
+}
+
+print "<td style=\"border: 1px solid;".$extracss."background-color:".$tbgcolvid." !important\" align=center>".$astart.$columndata3.$aend."</td>\n";
+
 $tbgcol="#FAF0E6";
+
+
 
     print "</tr>\n";
 }
