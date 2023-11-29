@@ -2,7 +2,7 @@
 Now Guide for VDC first Time Setup.
 
 * Make Sure both Cluster name are different ..when it was created..else would create problem.
-* Make sure the cephdata storage name is SAME on both Cluster..plus both are same time, like replication or erasure code 
+* Make sure the cephdata storage name is SAME on both Cluster..plus both are replication or erasure code 
 
 ## for Replication code sample
 echo "starceph" >  /etc/webmin/vdcsitemanager/ceph-storage-name
