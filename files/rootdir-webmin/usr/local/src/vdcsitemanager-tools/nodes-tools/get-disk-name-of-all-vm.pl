@@ -54,7 +54,7 @@ $vmlistjson=$vmlistjson.$_;
 close(FH);
 #"1","solid139","qemu-server","505","1","2","2048","32G",
 
-print '"SR","NODE","VM-CT","VMID","VMNAME","SOCKETS","CORES","MEMORY","DISK_0_NAME","DISK_0_SIZE","DISK_1_NAME","DISK_1_SIZE","DISK_2_NAME","DISK_2_SIZE","DISK_3_NAME","DISK_3_SIZE","DISK_4_NAME","DISK_4_SIZE"';
+print '"SR","NODE","VM-CT","VMID","VMNAME","SOCKETS","CORES","MEMORY","DISK 0 NAME","DISK 0 SIZE","DISK 1 NAME","DISK 1 SIZE","DISK 2 NAME","DISK 2 SIZE","DISK 3 NAME","DISK 3 SIZE","DISK 4 NAME","DISK 4 SIZE"';
 print "\n";
 my $vmlistarray = decode_json($vmlistjson);
 my $vmidlist = $vmlistarray->{'ids'};
@@ -100,6 +100,7 @@ my $vmcname='';
 my @vm_disk_list; my $vmdiski=0; my $vmdisklast="";
 my @vm_disk_listsize;
 foreach my $vmsection_data (@$vmparsed_data) {
+if($vmtype eq "lxc"){$vmcsockets="\"1\",";}
 foreach my $vmkey (sort keys %$vmsection_data) {
 my $vmvalue = $vmsection_data->{$vmkey};
 if($vmkey eq "hostname"){$vmcname="\"".$vmvalue."\",";}

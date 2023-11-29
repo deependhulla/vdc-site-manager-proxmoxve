@@ -100,6 +100,7 @@ my $vmcname='';
 my @vm_disk_list; my $vmdiski=0; my $vmdisklast="";
 my @vm_disk_listsize;
 foreach my $vmsection_data (@$vmparsed_data) {
+if($vmtype eq "lxc"){$vmcsockets="\"1\",";}
 foreach my $vmkey (sort keys %$vmsection_data) {
 my $vmvalue = $vmsection_data->{$vmkey};
 if($vmkey eq "hostname"){$vmcname="\"".$vmvalue."\",";}
