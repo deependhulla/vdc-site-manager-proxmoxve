@@ -34,3 +34,9 @@ php onetime-site-build-for-manager.php 1 192.168.30.113
 ## for site2 any one ip
 php onetime-site-build-for-manager.php 2 192.168.40.144
 
+Now Login to Webmin of VDC (example 192.168.40.30)
+https://192.168.40.30:833
+login : manager
+password from : /usr/local/src/manager-vdcmanager-pass
+
+
