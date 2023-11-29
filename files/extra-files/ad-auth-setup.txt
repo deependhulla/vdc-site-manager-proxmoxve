@@ -1,0 +1,6 @@
+apt-get install krb5-user samba sssd sssd-tools libnss-sss libpam-sss ntp ntpdate realmd adcli
+
+https://learn.microsoft.com/en-us/entra/identity/domain-services/join-ubuntu-linux-vm
+
+https://forum.virtualmin.com/t/login-to-webmin-with-ad-account/121280
+

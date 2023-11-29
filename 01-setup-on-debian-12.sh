@@ -55,7 +55,7 @@ memcached php-memcached php-bcmath dbconfig-common libapache2-mod-php php-intl \
 php-mysql php-intl libdbd-mysql-perl certbot python3-certbot-apache automysqlbackup \
 php-mailparse perl-doc mysqltuner catdoc imagemagick tesseract-ocr tesseract-ocr-eng \
 poppler-utils exiv2 libnet-dns-perl libmailtools-perl php-mail-mime \
-xapian-tools recoll libdatetime-format-mail-perl  \
+libjson-perl libjson-pp-perl xapian-tools recoll libdatetime-format-mail-perl  \
 
 systemctl restart chrony
 echo > /var/log/mail.log

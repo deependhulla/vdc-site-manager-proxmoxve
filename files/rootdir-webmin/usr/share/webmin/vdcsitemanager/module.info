@@ -1,7 +1,7 @@
 readonly=1
-desc=VDC SiteManager
+desc=VDC Site Manager
 category=servers
-name=VDC SiteManager
+name=VDC Site Manager
 risk=low medium high
 version=2.105
 longdesc=Cluster Data Sync Management

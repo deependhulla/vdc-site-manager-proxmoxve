@@ -6,6 +6,11 @@ $siteinfo="/etc/webmin/vdcsitemanager/siteinfo";
 ## max 9 siteid allowed
 if($siteid>0 && $siteip!="")
 {
+$cmdx="/bin/cp /etc/webmin/vdcsitemanager/ceph-storage-name /usr/local/src/vdcsitemanager-tools/nodes-tools/";
+`$cmdx`;
+$cmdx="/bin/cp /etc/webmin/vdcsitemanager/ceph-erasure-code /usr/local/src/vdcsitemanager-tools/nodes-tools/";
+`$cmdx`;
+
 $siteidfolder=$siteinfo."/site-info-".$siteid."/";
 $cmdx="mkdir -p ".$siteidfolder." 1>/dev/null 2>/dev/null";
 `$cmdx`;
