@@ -154,17 +154,11 @@ my $showallow=1;
 if($rx==0){$tcolx=@columns;}$rx++;
     print "<tr>\n";
 my $colx=0;
-my $vmid="";
-my $nodename="";
-my $vmname="";
     foreach my $column (@columns) {
 $colx++;
 my $columndata=$column;
 my $columndata1=$cephstorage.":";
 $columndata =~ s/$columndata1//g;
-if($colx==4){$vmid=$column;}
-if($colx==2){$nodename=$column;}
-if($colx==5){$vmname=$column;}
 if ($columndata =~ /:/) {
 ## as there is another storage mapped
 $showallow=0;
@@ -193,7 +187,7 @@ if($showallow==1)
 $tbgcolvid='#AFEEEE';
 $extracss="text-decoration: underline;";
 $columndata3="Manage";
-$astart="<a href=\"index.cgi?fun=datasyncnow&vmid=".$vmid."&nodename=".$nodename."&vmname=".$vmname."\">";$aend="</a>";
+$astart="<a href=\"index.cgi?fun=managevm\">";$aend="</a>";
 }
 }
 
