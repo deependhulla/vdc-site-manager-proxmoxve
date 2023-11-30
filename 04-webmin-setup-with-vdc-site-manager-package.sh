@@ -13,6 +13,7 @@ apt-get -y install webmin
 ## copies all program of VDC
 /bin/cp -pR files/rootdir-webmin/* /
 mkdir -p /etc/webmin/vdcsitemanager/siteinfo
+mkdir /etc/webmin/vdcsitemanager/data-sync-vm-config
 mkdir -p /var/log/vdcsitemanager-logs
 ## ssh key-gen
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -N ""

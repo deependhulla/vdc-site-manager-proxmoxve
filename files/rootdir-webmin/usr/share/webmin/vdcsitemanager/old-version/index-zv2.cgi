@@ -10,7 +10,7 @@ use WebminCore;
   init_config();
 
 &ReadParse();
-my $datasyncvmconfigfolder='/etc/webmin/vdcsitemanager/data-sync-vm-config';
+  
 my $showheadernow=1;
 my $fun=$in{'fun'};
 my $crontab_schedule_active_no="";
@@ -229,16 +229,6 @@ print "DATA Sync VM List";
 if($fun eq "datasyncnow")
 {
 print "<h3>Data Sync for VM ID : ".$in{'vmid'}."</h3>";
-my $vmfolder=$datasyncvmconfigfolder."/".$in{'vmid'}."/";
-my $vmfolderc=$datasyncvmconfigfolder."/".$in{'vmid'}."/vmconfig/";
-my $cmdmk="mkdir -p ".$vmfolder."";
-my $cmdoutmk=`$cmdmk`;
-my $cmdmk="mkdir -p ".$vmfolderc."";
-my $cmdoutmk=`$cmdmk`;
-#print "--> $cmdmk ";
-my $vmfile=$vmfolder."/".$in{'vmid'}."-datasync.conf";
-
-
 
 my $cmdx="/usr/local/src/vdcsitemanager-tools/manager-tools/get-per-vmid-info.pl ".$in{'vmid'}."";
 my $csvdata=`$cmdx`;
@@ -278,39 +268,6 @@ print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" a
 
 print "</table>\n";
 
-
-
-
-if($in{'funupdate'} eq "update-vm-data-sync-setting")
-{
-my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
-my $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
-open(OUTOAZ,">$vmfile");
-print OUTOAZ "SYNCACTIVE===\n";
-print OUTOAZ "CRONTABCONFIG===\n";
-print OUTOAZ "EMAILUPDATES===\n";
-close(OUTOAZ);
-
-print "<strong><font color=green> Config Updated as on ".$curdatetime."</font></strong>";
-### update of config done and also cron updated code
-}
-
-
-my $vmactiveconfig="DISABLED";my $vmcrontabconfig="0 */2 * * *";my $vmemailconfig="";my $vmnameconfig="";
-open(OUTOAZ,"<$vmfile");
-while(<OUTOAZ>)
-{
-my $fileline=$_;
-my @lineb1 = split(/===/, $fileline);
-if($lineb1[0] eq "SYNCACTIVE"){$vmactiveconfig=$lineb1[1];}
-if($lineb1[0] eq "CRONTABCONFIG"){$vmcrontabconfig=$lineb1[1];}
-if($lineb1[0] eq "EMAILUPDATES"){$vmemailconfig=$lineb1[1];}
-}
-close(OUTOAZ);
-
-if($vmactiveconfig eq "ACTIVE"){$crontab_schedule_active_no='';$crontab_schedule_active_yes='selected';}
-if($vmactiveconfig eq "DISABLED"){$crontab_schedule_active_no='selected';$crontab_schedule_active_yes='';}
-
 my @cronvalue=();my @crontitle=();my $c=0;
 $cronvalue[$c]="*/10 * * * *";$crontitle[$c]="Every 101 minutes";$c++;
 $cronvalue[$c]="*/20 * * * *";$crontitle[$c]="Every 20 minutes";$c++;
@@ -327,26 +284,23 @@ $cronvalue[$c]="0 */6 * * *";$crontitle[$c]="Every 6 hours";$c++;
 my $cronbox="";
 for($c=0;$c<@cronvalue;$c++)
 {
-my $cronboxsel='';
 $cronbox=$cronbox."\n";
-if($vmcrontabconfig eq $cronvalue[$c]){$cronboxsel='selected';}
-$cronbox=$cronbox."<option value=\"".$cronvalue[$c]."\" ".$cronboxsel.">".$crontitle[$c]."</option>";
+$cronbox=$cronbox."<option value=\"".$cronvalue[$c]."\">".$crontitle[$c]."</option>";
 }
 print  "<form name=\"myform\" id=\"myform\" action =\"index.cgi\">";
 print "<input type=\"hidden\" name=\"vmid\" id=\"vmid\" value=\"".$in{'vmid'}."\">";
-print "<input type=\"hidden\" name=\"funupdate\" id=\"funupdate\" value=\"update-vm-data-sync-setting\">";
-print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"datasyncnow\">";
+print "<input type=\"hidden\" name=\"vmid\" id=\"funupdate\" value=\"update-vm-data-sync-setting\">";
+print "<input type=\"hidden\" name=\"vmid\" id=\"fun\" value=\"datasyncnow\">";
 my $formdata="";
 $formdata='
  <label for="crontab_schedule">Select Crontab Schedule for VM Data Sync:</label>
   Schedule:  <select id="crontab_schedule_active" name="crontab_schedule_active">
-      <option value="DISABLED" '.$crontab_schedule_active_no.'>DISABLED</option>
+      <option value="INACTIVE" '.$crontab_schedule_active_no.'>DISABLED</option>
       <option value="ACTIVE" '.$crontab_schedule_active_yes.'>ACTIVE</option>
 </select>
- for  
-    <select id="crontab_schedule_value" name="crontab_schedule_value">'.$cronbox.'
+:     <select id="crontab_schedule_value" name="crontab_schedule_value">'.$cronbox.'
     </select>
- Email updates (optional) <input type="email" name="email" value="">    
+Email updates(optional) <input type="email" name="email" value="">    
 
 <br><br>
     <input type="submit" value="Update Data Sync Settings">
