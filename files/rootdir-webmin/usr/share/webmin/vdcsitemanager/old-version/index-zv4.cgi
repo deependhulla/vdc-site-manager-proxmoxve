@@ -237,7 +237,7 @@ my $cmdmk="mkdir -p ".$vmfolderc."";
 my $cmdoutmk=`$cmdmk`;
 #print "--> $cmdmk ";
 my $vmfile=$vmfolder."/".$in{'vmid'}."-datasync.conf";
-my @diskimage=();
+
 
 
 my $cmdx="/usr/local/src/vdcsitemanager-tools/manager-tools/get-per-vmid-info.pl ".$in{'vmid'}."";
@@ -261,13 +261,6 @@ my $columndata=$column;
 if($columndata eq "SITE_ID"){$columndata="ACTIVE ON SITE";}
 if($columndata eq "CLUSTER_NAME"){$columndata="ACTIVE ON CLUSTER";}
 if($columndata eq "NODE"){$columndata="ACTIVE ON NODE";}
-if($rx==2)
-{
-if($colx==10){$diskimage[0]=$columndata;}
-if($colx==12){$diskimage[1]=$columndata;}
-if($colx==14){$diskimage[2]=$columndata;}
-if($colx==15){$diskimage[3]=$columndata;}
-}
     #    print "<td>$column</td>\n";
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
 
@@ -284,22 +277,10 @@ print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" a
 }
 
 print "</table>\n";
-########################################################
-########################################################
-########################################################
 
 
-########################################################
-#for($si=0;$si<@siteinfo;$si++){
-#print "<h5>VMs Disk Usage in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h5>";
-#my $nodesship=$siteinfonodeip[$si][0];print "<pre>";for(my $di=0; $di <@diskimage; $di++){
-#$cmdx="ssh root@".$siteinfonodeip[$si][0]."  rbd du '".$cephstorage."/".$diskimage[$di]."' ";
-#my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}print "</pre>";}
-########################################################
 
 
-########################################################
-########################################################
 if($in{'funupdate'} eq "update-vm-data-sync-setting")
 {
 my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
@@ -314,7 +295,7 @@ print "<strong><font color=green> Config Updated as on ".$curdatetime."</font></
 ### update of config done and also cron updated code
 }
 
-#####################################################
+
 my $vmactiveconfig="DISABLED";my $vmcrontabconfig="0 */2 * * *";my $vmemailconfig="";my $vmnameconfig="";
 open(OUTOAZ,"<$vmfile");
 while(<OUTOAZ>)
@@ -377,17 +358,6 @@ $formdata='
 print $formdata;
 
 print "</form>";
-
-
-
-
-########################################################
-print "<hr>";for($si=0;$si<@siteinfo;$si++){
-print "<h5>VMs Disk Usage in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h5>";
-my $nodesship=$siteinfonodeip[$si][0];print "<pre>";for(my $di=0; $di <@diskimage; $di++){
-$cmdx="ssh root@".$siteinfonodeip[$si][0]."  rbd du '".$cephstorage."/".$diskimage[$di]."' ";
-my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}print "</pre>";} print "<hr>";
-########################################################
 
 
 ##### OVER if loop
