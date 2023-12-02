@@ -54,7 +54,9 @@ $vmlistjson=$vmlistjson.$_;
 close(FH);
 #"1","solid139","qemu-server","505","1","2","2048","32G",
 
-print '"SR","NODE","VM-CT","VMID","VMNAME","SOCKETS","CORES","MEMORY","DISK0","DISK1","DISK2","DISK3","DISK4"';
+print '"SR","NODE","VM-CT","VMID","VMNAME","SOCKETS","CORES","MEMORY","DISK0","DISK1","DISK2","DISK3","DISK4","DISK5","DISK6","DISK7","DISK8","DISK9","DISK10"';
+print "\n";
+
 print "\n";
 my $vmlistarray = decode_json($vmlistjson);
 my $vmidlist = $vmlistarray->{'ids'};
