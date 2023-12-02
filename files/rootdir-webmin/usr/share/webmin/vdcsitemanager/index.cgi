@@ -385,7 +385,8 @@ print "</form>";
 print "<hr>";for($si=0;$si<@siteinfo;$si++){
 print "<h5>VMs Disk Usage in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h5>";
 my $nodesship=$siteinfonodeip[$si][0];print "<pre>";for(my $di=0; $di <@diskimage; $di++){
-$cmdx="ssh root@".$siteinfonodeip[$si][0]."  rbd du '".$cephstorage."/".$diskimage[$di]."' ";
+$cmdx="ssh root@".$siteinfonodeip[$si][0]."  \"rbd du '".$cephstorage."/".$diskimage[$di]."'\" ";
+#print "\n$cmdx\n";
 my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}print "</pre>";} print "<hr>";
 ########################################################
 
