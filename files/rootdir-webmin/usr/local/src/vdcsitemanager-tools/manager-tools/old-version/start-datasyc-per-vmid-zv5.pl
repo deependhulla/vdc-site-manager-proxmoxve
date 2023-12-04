@@ -4,17 +4,11 @@ use strict;
 use warnings;
 use JSON::PP; 
 
-my $debugnow=0;
+my $debugnow=1;
 
 ## means datasync on node 3
 my $datasyncnodeid=1;
 my $hs="";
-my $hsend="";
-my $hfire="";
-my $hlog="";
-my $hlock="";
-
-my $uidx=time();
 
 my $checkvmid="";
 $checkvmid=$ARGV[0];
@@ -29,10 +23,6 @@ print "or final Sync then shutdown and activate to another cluster and Do-Not-st
 exit;
 }
 
-my $folder_path='';
-$folder_path='/var/vdcsitemanager/';if (!-d $folder_path) {if (mkdir $folder_path){}}
-$folder_path='/var/vdcsitemanager/nodes-scripts/';if (!-d $folder_path) {if (mkdir $folder_path){}}
-$folder_path='/var/vdcsitemanager/nodes-logs/';if (!-d $folder_path) {if (mkdir $folder_path){}}
 my $checkactivate='';
 my $checkstartstop='';
 $checkactivate=$ARGV[1];
@@ -64,7 +54,6 @@ exit;
 
 
 
-my $finalscript='/var/vdcsitemanager/nodes-scripts/'.$checkvmid.'-datasyncscript.sh';
 my $cephstorage="";
 my $cepherasure="";
 my $cepherasuremsg=" Replication mode";
@@ -317,20 +306,7 @@ print "TO ON NODE : ".$tonodename."\n";
 print "TO ON NODE ID : ".$tonodeid."\n";
 print "TO ON NODE IP : ".$tonodeip."\n";
 print "\n---------------------\n";
-
 }
-if($tj==1)
-{
-$hs=$hs."#/bin/bash\n";
-$hs=$hs."\n";
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` Disk-Sync Started for VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> /var/vdcsitemanager/nodes-logs/".$checkvmid."-".$uidx."-datasync.log ";
-}
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> /var/vdcsitemanager/nodes-logs/".$checkvmid."-datasync.log ";
-$hs=$hs."\n";
-$hs=$hs."php sync-vm-disk-data-to-another-cluster.php ".$cephstorage." ".$cepherasureactive." ".$checkvmid." ".$totaldiskname[$ti]." ".$fromnodeip." ".$tonodeip." ".$uidx."";
-$hs=$hs."";
-$hs=$hs."";
-
 ## for loop of valid Disk over
 }
 #### work for Script to Sync Disk from one cluster to another end #####
@@ -351,14 +327,12 @@ $hs=$hs."";
 }
 
 ##########VM INFO over####################
-open(OUTOAZ,">$finalscript");
-print OUTOAZ $hs;
-close(OUTOAZ);
-#print $hs;
+print "\n";
 
-print " $finalscript";
-
-
+print $hs;
 
 print "\n";
+
+
+
 
