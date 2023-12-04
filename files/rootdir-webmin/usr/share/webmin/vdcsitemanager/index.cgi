@@ -269,7 +269,13 @@ if($rx==2)
 if($colx==10){$diskimage[0]=$columndata;}
 if($colx==12){$diskimage[1]=$columndata;}
 if($colx==14){$diskimage[2]=$columndata;}
-if($colx==15){$diskimage[3]=$columndata;}
+if($colx==16){$diskimage[3]=$columndata;}
+if($colx==18){$diskimage[4]=$columndata;}
+if($colx==20){$diskimage[5]=$columndata;}
+if($colx==22){$diskimage[6]=$columndata;}
+if($colx==24){$diskimage[7]=$columndata;}
+if($colx==26){$diskimage[8]=$columndata;}
+if($colx==28){$diskimage[9]=$columndata;}
 }
     #    print "<td>$column</td>\n";
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";

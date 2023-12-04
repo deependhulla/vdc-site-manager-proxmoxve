@@ -357,13 +357,13 @@ $folder_path='/var/vdcsitemanager/nodes-logs/';if (!-d $folder_path) {if (mkdir 
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-scripts/';";  
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-lock/';";  
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-logs/';";  
-$hsend=$hsend."scp \"".$finalscript."\" root@".$fromnodeip.":/var/vdcsitemanager/nodes-scripts/ ";
+$hsend=$hsend."scp \"".$finalscript."\" root@".$tonodeip.":/var/vdcsitemanager/nodes-scripts/ ";
 $hfire="fire $finalscript";
-## for First disk  and header--work
+## for First disk --work
 }
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> /var/vdcsitemanager/nodes-logs/".$checkvmid."-datasync.log ";
 $hs=$hs."\n";
-$hs=$hs."php /usr/local/src/vdcsitemanager-tools/nodes-tools/sync-vm-disk-data-to-another-cluster.php ".$cephstorage." ".$cepherasureactive." ".$checkvmid." ".$totaldiskname[$ti]." ".$fromnodeip." ".$tonodeip." ".$uidx." ";
+$hs=$hs."php sync-vm-disk-data-to-another-cluster.php ".$cephstorage." ".$cepherasureactive." ".$checkvmid." ".$totaldiskname[$ti]." ".$fromnodeip." ".$tonodeip." ".$uidx." ";
 $hs=$hs."\n";
 $hs=$hs."";
 $hs=$hs."";
@@ -392,7 +392,6 @@ open(OUTOAZ,">$finalscript");
 print OUTOAZ $hs;
 close(OUTOAZ);
 
-chmod(0755, $finalscript);
 ##create lock file
 open(OUTOAZU,">$hlock");
 print OUTOAZU "UIDX=".$uidx."\n";
@@ -404,15 +403,9 @@ print OUTOAZU "STARTTIME=".$curdatetime."\n";
 print OUTOAZU $finalscript;
 close(OUTOAZU);
 
-
- ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
- $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
-print "\n$hsend \n";
-my $cmdxoutx=`$hsend`;
-print "".$curdatetime." ".$uidx." Data-Sync Process Started for VMID: ".$checkvmid." ".$cmdxoutx."\n";
-#print "".$curdatetime." ".$uidx." ".$hfire."\n";
-
-
+print "\n $finalscript";
+print "\n".$hsend;
+print "\n".$hfire;
 
 
 

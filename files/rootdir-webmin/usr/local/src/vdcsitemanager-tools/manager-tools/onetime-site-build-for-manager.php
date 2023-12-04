@@ -27,6 +27,20 @@ if (isset($node_data['nodelist'])) {
 $cmdx="scp -r /usr/local/src/vdcsitemanager-tools root@".$nodeDetails['ip'].":/usr/local/src/";
 print "\n $cmdx \n";
 `$cmdx`;
+$cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/';";
+print "\n $cmdx \n";
+`$cmdx`;
+$cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/nodes-scripts/';";
+print "\n $cmdx \n";
+`$cmdx`;
+$cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/nodes-lock/';";
+print "\n $cmdx \n";
+`$cmdx`;
+$cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/nodes-logs/';";
+print "\n $cmdx \n";
+`$cmdx`;
+
+
 ///per node copy done
     }
 }
