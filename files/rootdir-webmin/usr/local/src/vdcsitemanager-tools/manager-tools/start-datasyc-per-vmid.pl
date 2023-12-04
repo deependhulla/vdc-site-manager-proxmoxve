@@ -6,7 +6,7 @@ use JSON::PP;
 
 ## means datasync on node 3
 my $datasyncnodeid=1;
-
+my $hs="";
 
 my $checkvmid="";
 $checkvmid=$ARGV[0];
@@ -327,6 +327,10 @@ print "\n---------------------\n";
 }
 
 ##########VM INFO over####################
+print "\n";
+
+print $hs;
+
 print "\n";
 
 
