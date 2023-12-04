@@ -15,6 +15,7 @@ my $showheadernow=1;
 my $fun=$in{'fun'};
 my $crontab_schedule_active_no="";
 my $crontab_schedule_active_yes="";
+my $cephmeta='';
 if($showheadernow==1)
 {
  ui_print_header(undef, 'VDC Site Manager', '');
@@ -59,11 +60,13 @@ if($cepherasure eq "0")
 {
 $cepherasuremsg="(replication)";
 $cepherasureactive=0;
+$cephmeta='';
 }
 if($cepherasure eq "1")
 {
 $cepherasuremsg="(erasure code)";
 $cepherasureactive=1;
+$cephmeta='-metadata';
 }
 print "<center>";
   print ui_table_start('Cluster\'s Data Sync : Ceph-Storage: '.$cephstorage.' '.$cepherasuremsg, 'width=100% align=center',undef, 3);
@@ -385,7 +388,7 @@ print "</form>";
 print "<hr>";for($si=0;$si<@siteinfo;$si++){
 print "<h5>VMs Disk Usage in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h5>";
 my $nodesship=$siteinfonodeip[$si][0];print "<pre>";for(my $di=0; $di <@diskimage; $di++){
-$cmdx="ssh root@".$siteinfonodeip[$si][0]."  \"rbd du '".$cephstorage."/".$diskimage[$di]."'\" ";
+$cmdx="ssh root@".$siteinfonodeip[$si][0]."  \"rbd du '".$cephstorage.$cephmeta."/".$diskimage[$di]."'\" ";
 #print "\n$cmdx\n";
 my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}print "</pre>";} print "<hr>";
 ########################################################
