@@ -16,7 +16,6 @@ my $fun=$in{'fun'};
 my $crontab_schedule_active_no="";
 my $crontab_schedule_active_yes="";
 my $cephmeta='';
-my $checkvmid=$in{'vmid'};
 if($showheadernow==1)
 {
  ui_print_header(undef, 'VDC Site Manager', '');
@@ -379,89 +378,14 @@ $formdata='
  for  
     <select id="crontab_schedule_value" name="crontab_schedule_value">'.$cronbox.'
     </select>
-<!-- Email updates (optional) <input type="email" name="email_update" id="email_update" value="'.$vmemailconfig.'">     -->
+ Email updates (optional) <input type="email" name="email_update" id="email_update" value="'.$vmemailconfig.'">    
 
     <input type="submit" value="Update Data Sync Settings" style="background-color:skyblue">
 ';
 
 print $formdata;
 
-print "</form><hr>";
-
-#################
-########################################################
-if($in{'funupdate'} eq "do-sync-activate")
-{
-my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
-my $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
-
-my $cmdstart='/usr/local/src/vdcsitemanager-tools/manager-tools/start-datasync-per-vmid.pl '.$checkvmid;
-print "<hr> $cmdstart  <hr>";
-my $cmdxout=`$cmdstart`;
-print "<strong><font color=green> Manual Activity started as on ".$curdatetime."</font></strong>";
-### update of config done and also cron updated code
-}
-
-my $hlock="/var/vdcsitemanager/nodes-lock/".$checkvmid."-datasync.lock";
-my $lockvm=0;
-if (-e $hlock) {
-$lockvm=1;
-my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
-my $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
- #   print "".$curdatetime."  LOCK ON VM ID ".$checkvmid." for Data-Sync.\n";
- #   print "".$curdatetime."  LOCK INFO OF PROCESS\n";
-open(OUTOAZ,"<$hlock");
-while(<OUTOAZ>)
-{
-#    print "".$curdatetime." ".$uidx." ";
-#print $_;
-}
-close(OUTOAZ);
-print "\n";
-}
-#################
-my $scriptx='<script>
-function fxnow()
-{
-if(confirm(\'Are you sure you want to trigger Manual\'))
-{
-document.myform2.submit();
-}
-}
-</script>
-';
-if($lockvm==1)
-{
-print "<b><font color=green>DATA SYNC PROCESS IS GOING ON/LOCKED : MANUAL ACTIVATION DISABLED.</font></b>";
-}
-if($lockvm==0)
-{
-print $scriptx;
-print  "<form name=\"myform2\" id=\"myform2\" action =\"index.cgi\">";
-print "<input type=\"hidden\" name=\"vmid\" id=\"vmid\" value=\"".$in{'vmid'}."\">";
-print "<input type=\"hidden\" name=\"funupdate\" id=\"funupdate\" value=\"do-sync-activate\">";
-print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"datasyncnow\">";
-my $formdata="";
-$formdata='
- <label for="crontab_schedule">MANUAL SYNC VM DATA:</label>
-  Schedule:  <select id="crontab_schedule_active" name="crontab_schedule_active">
-      <option value="ONLYSYNC" >Only Sync (NO MOVE and VM STATUS REMAIN UNCHANGE )</option>
-      <option value="SYNC-STOP" >Sync then SHUTDOWN and Move to another and keep it SHUTDOWN)</option>
-      <option value="SYNC-START" >Sync then SHUTDOWN and Move to another and START VM)</option>
-</select>
-
-    <input type="button" value="Manual Activate" style="background-color:pink" onClick="fxnow();return false;">
-';
-
-print $formdata;
-
 print "</form>";
-}
-
-
-#################
-#################
-#################
 
 
 
