@@ -425,6 +425,7 @@ $hs=$hs."";
 
 $hs=$hs."\n";
 $hs=$hs."\n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync Completed  \"  ";
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync Completed  \" >> ".$hlog." ";
 if($checkstartstop eq "start" || $checkstartstop eq "stop")
 {
@@ -435,23 +436,28 @@ my $cmdcopyout=`$copycmdx`;
 
 $hs=$hs."\n";
 $hs=$hs."qm shutdown ".$checkvmid." \n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip."  \"  ";
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip."  \" >> ".$hlog." ";
 $hs=$hs."\n";
 my $xcopycmdx="/bin/mv -v /etc/pve/nodes/".$fromnodename."/".$vmtype."/".$checkvmid.".conf /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf; scp /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf root@".$tonodeip.":/etc/pve/nodes/".$tonodename."/".$vmtype."/".$checkvmid.".conf";
 #print "\n $xcopycmdx \n";
 $hs=$hs.$xcopycmdx;
 $hs=$hs."\n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Config moved from ".$fromnodeip."  to ".$tonodeip." \" ";
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Config moved from ".$fromnodeip."  to ".$tonodeip." \" >> ".$hlog." ";
 $hs=$hs."\n";
-$hs=$hs."sleep 5\n";
-$hs=$hs."\n";
-$hs=$hs." ssh root@".$tonodeip." 'qm start ".$checkvmid."' \n";
-$hs=$hs."\n";
+
 $hs=$hs."\n";
 
 }
 if($checkstartstop eq "start")
 {
+$hs=$hs."\n";
+$hs=$hs."sleep 5\n";
+$hs=$hs."\n";
+$hs=$hs." ssh root@".$tonodeip." 'qm start ".$checkvmid."' \n";
+$hs=$hs."\n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Started on ".$tonodeip." \" >> ".$hlog." ";
 $hs=$hs."\n";
 $hs=$hs."\n";
 }
@@ -461,6 +467,8 @@ $hs=$hs."\n";
 $hs=$hs."ssh root@".$vdcip." 'nohup /usr/local/src/vdcsitemanager-tools/manager-tools/unlock-vm-datasync-process.pl ".$checkvmid." > /dev/null 2>&1 &'\n";
 $hs=$hs."\n";
 $hs=$hs."/bin/rm -v ".$hlock."";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM WORKDONE  \"  ";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM WORKDONE  \" >> ".$hlog." ";
 $hs=$hs."\n";
 $hs=$hs."fi";
 $hs=$hs."\n";
