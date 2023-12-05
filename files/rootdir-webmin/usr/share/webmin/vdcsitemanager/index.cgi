@@ -396,7 +396,11 @@ my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1
 my $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
 
 my $cmdstart='/usr/local/src/vdcsitemanager-tools/manager-tools/start-datasync-per-vmid.pl '.$checkvmid;
+if($in{'mactive'} eq "SYNC-STOP"){$cmdstart=$cmdstart." activate stop";}
+if($in{'mactive'} eq "SYNC-START"){$cmdstart=$cmdstart." activate start";}
+
 print "<hr> $cmdstart  <hr>";
+
 my $cmdxout=`$cmdstart`;
 print "<strong><font color=green> Manual Activity started as on ".$curdatetime."</font></strong>";
 ### update of config done and also cron updated code
@@ -444,10 +448,10 @@ print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"datasyncnow\">";
 my $formdata="";
 $formdata='
  <label for="crontab_schedule">MANUAL SYNC VM DATA:</label>
-  Schedule:  <select id="crontab_schedule_active" name="crontab_schedule_active">
+  <select id="mactive" name="mactive">
       <option value="ONLYSYNC" >Only Sync (NO MOVE and VM STATUS REMAIN UNCHANGE )</option>
-      <option value="SYNC-STOP" >Sync then SHUTDOWN and Move to another and keep it SHUTDOWN)</option>
-      <option value="SYNC-START" >Sync then SHUTDOWN and Move to another and START VM)</option>
+      <option value="SYNC-STOP" >Sync then SHUTDOWN and MOVE to another Cluster and keep it SHUTDOWN)</option>
+      <option value="SYNC-START" >Sync then SHUTDOWN and MOVE to another Cluster and START VM on another Cluster)</option>
 </select>
 
     <input type="button" value="Manual Activate" style="background-color:pink" onClick="fxnow();return false;">
