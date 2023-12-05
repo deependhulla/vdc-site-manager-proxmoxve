@@ -356,6 +356,16 @@ if($tj==1)
 {
 $hs=$hs."#/bin/bash\n";
 $hs=$hs."\n";
+$hs=$hs."BASEDIR=\$(dirname \$0)
+cd \$BASEDIR
+
+if [ -f '".$hlock."' ];
+then
+   echo 'File ".$hlock." exists'
+else
+
+touch ".$hlock." ";
+
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync Started from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." \n";
 
 $folder_path='/var/vdcsitemanager/';if (!-d $folder_path) {if (mkdir $folder_path){}}
@@ -401,6 +411,11 @@ $hs=$hs."";
 
 $hs=$hs."\n";
 $hs=$hs."ssh root@".$vdcip." 'nohup /usr/local/src/vdcsitemanager-tools/manager-tools/unlock-vm-datasync-process.pl ".$checkvmid." > /dev/null 2>&1 &'\n";
+$hs=$hs."\n";
+$hs=$hs."/bin/rm -v ".$hlock."";
+$hs=$hs."\n";
+$hs=$hs."fi";
+$hs=$hs."\n";
 ##########VM INFO over####################
 open(OUTOAZ,">$finalscript");
 print OUTOAZ $hs;
