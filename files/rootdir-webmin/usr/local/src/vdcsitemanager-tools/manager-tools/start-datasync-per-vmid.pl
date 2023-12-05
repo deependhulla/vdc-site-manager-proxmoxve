@@ -22,14 +22,24 @@ my $hlog="";
 my $hlogv="";
 my $hlock="";
 my $tonodeip='';
+my $tonodename='';
 my $fromnodeip='';
-
+my $fromnodename='';
+my $vmtype='';
 my $uidx=time();
 
 my $checkvmid="";
 $checkvmid=$ARGV[0];
 if (defined $checkvmid) {
 ## working on VMID
+use Scalar::Util qw(looks_like_number);
+if (looks_like_number($checkvmid)) {
+#        print "Argument is numeric.\n";
+    } else {
+        print "VMID  is not numeric.\n";
+exit;
+    }
+
 }
 else
 {
@@ -44,9 +54,12 @@ $folder_path='/var/vdcsitemanager/';if (!-d $folder_path) {if (mkdir $folder_pat
 $folder_path='/var/vdcsitemanager/nodes-scripts/';if (!-d $folder_path) {if (mkdir $folder_path){}}
 $folder_path='/var/vdcsitemanager/nodes-lock/';if (!-d $folder_path) {if (mkdir $folder_path){}}
 $folder_path='/var/vdcsitemanager/nodes-logs/';if (!-d $folder_path) {if (mkdir $folder_path){}}
+$folder_path='/var/vdcsitemanager/nodes-config-backup/';if (!-d $folder_path) {if (mkdir $folder_path){}}
 my $checkactivate='';
 my $checkstartstop='';
 $checkactivate=$ARGV[1];
+my $finalstart='';
+my $finalstop='';
 if (defined $checkactivate) { $checkstartstop=$ARGV[2];
 ## working on VMID
 
@@ -56,6 +69,7 @@ if (defined $checkstartstop && $checkactivate eq "activate")
 if($checkstartstop eq "start" || $checkstartstop eq "stop")
 {
 ##work final
+
 }
 else
 {
@@ -297,7 +311,7 @@ if($jj==2){$jj=0;}
 #totaldiskname
 my $fromsiteid=$siteinfo[$si];
 my $fromclustername=$siteinfoname[$si];
-my $fromnodename=$infox[0];
+$fromnodename=$infox[0];
 #my $fromnodeip='';
 my $fromnodeid=0;
 my $fromdatasyncip=$siteinfonodeip[$si][$datasyncnodeid];
@@ -306,11 +320,11 @@ if($si==0){$tsi=1;}
 if($si==1){$tsi=0;}
 my $tositeid=$siteinfo[$tsi];
 my $toclustername=$siteinfoname[$tsi];
-my $tonodename='';
+$tonodename='';
 #my $tonodeip='';
 my $tonodeid=0;
 
-my $vmtype=$infox[1];
+$vmtype=$infox[1];
 my $tdisk=@totaldiskname;
 my $tj=0;
 
@@ -409,6 +423,26 @@ $hs=$hs."";
 
 #####$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > /dev/null 2>&1 &' ";
 
+$hs=$hs."\n";
+$hs=$hs."\n";
+if($checkstartstop eq "start" || $checkstartstop eq "stop")
+{
+##copy the config for backup
+my $copycmdx="scp root@".$fromnodeip.":/etc/pve/nodes/".$fromnodename."/".$vmtype."/".$checkvmid.".conf /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf";
+#print "\n$copycmdx \n";
+my $cmdcopyout=`$copycmdx`;
+
+$hs=$hs."qm shutdown ".$checkvmid." \n";
+$hs=$hs."\n";
+
+}
+if($checkstartstop eq "start")
+{
+$hs=$hs."\n";
+$hs=$hs."\n";
+}
+$hs=$hs."\n";
+$hs=$hs."\n";
 $hs=$hs."\n";
 $hs=$hs."ssh root@".$vdcip." 'nohup /usr/local/src/vdcsitemanager-tools/manager-tools/unlock-vm-datasync-process.pl ".$checkvmid." > /dev/null 2>&1 &'\n";
 $hs=$hs."\n";
