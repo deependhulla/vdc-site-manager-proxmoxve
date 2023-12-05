@@ -442,6 +442,12 @@ my $xcopycmdx="/bin/mv -v /etc/pve/nodes/".$fromnodename."/".$vmtype."/".$checkv
 $hs=$hs.$xcopycmdx;
 $hs=$hs."\n";
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Config moved from ".$fromnodeip."  to ".$tonodeip." \" >> ".$hlog." ";
+$hs=$hs."\n";
+$hs=$hs."sleep 5\n";
+$hs=$hs."\n";
+$hs=$hs." ssh root@".$tonodeip." 'qm start ".$checkvmid."' \n";
+$hs=$hs."\n";
+$hs=$hs."\n";
 
 }
 if($checkstartstop eq "start")
