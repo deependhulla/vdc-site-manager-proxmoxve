@@ -392,7 +392,7 @@ $folder_path='/var/vdcsitemanager/nodes-logs/';if (!-d $folder_path) {if (mkdir 
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-logs/';";  
 $hsend=$hsend."scp \"".$finalscript."\" root@".$fromnodeip.":/var/vdcsitemanager/nodes-scripts/ ";
 #####$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > /dev/null 2>&1 &' ";
-$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > ".$hlogv." 2>&1 &' ";
+$hfire=$hfire."ssh root@".$fromnodeip." 'nohup bash ".$finalscript." > ".$hlogv." 2>&1 &' ";
 ## for First disk  and header--work
 }
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." ";
@@ -425,6 +425,7 @@ $hs=$hs."";
 
 $hs=$hs."\n";
 $hs=$hs."\n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync Completed  \" >> ".$hlog." ";
 if($checkstartstop eq "start" || $checkstartstop eq "stop")
 {
 ##copy the config for backup
@@ -432,8 +433,15 @@ my $copycmdx="scp root@".$fromnodeip.":/etc/pve/nodes/".$fromnodename."/".$vmtyp
 #print "\n$copycmdx \n";
 my $cmdcopyout=`$copycmdx`;
 
-$hs=$hs."qm shutdown ".$checkvmid." \n";
 $hs=$hs."\n";
+$hs=$hs."qm shutdown ".$checkvmid." \n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip."  \" >> ".$hlog." ";
+$hs=$hs."\n";
+my $xcopycmdx="/bin/mv -v /etc/pve/nodes/".$fromnodename."/".$vmtype."/".$checkvmid.".conf /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf; scp /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf root@".$tonodeip.":/etc/pve/nodes/".$tonodename."/".$vmtype."/".$checkvmid.".conf";
+#print "\n $xcopycmdx \n";
+$hs=$hs.$xcopycmdx;
+$hs=$hs."\n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Config moved from ".$fromnodeip."  to ".$tonodeip." \" >> ".$hlog." ";
 
 }
 if($checkstartstop eq "start")
