@@ -12,7 +12,6 @@ my $hs="";
 my $hsend="";
 my $hfire="";
 my $hlog="";
-my $hlogv="";
 my $hlock="";
 my $tonodeip='';
 my $fromnodeip='';
@@ -70,7 +69,6 @@ exit;
 
 my $finalscript='/var/vdcsitemanager/nodes-scripts/'.$checkvmid.'-datasyncscript.sh';
 $hlog="/var/vdcsitemanager/nodes-logs/".$checkvmid."-".$uidx."-datasync.log";
-$hlogv="/var/vdcsitemanager/nodes-logs/".$checkvmid."-datasync.log";
 $hlock="/var/vdcsitemanager/nodes-lock/".$checkvmid."-datasync.lock";
 
 if (-e $hlock) {
@@ -349,7 +347,7 @@ if($tj==1)
 {
 $hs=$hs."#/bin/bash\n";
 $hs=$hs."\n";
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync Started from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." \n";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` Disk-Sync Started for VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." \n";
 
 $folder_path='/var/vdcsitemanager/';if (!-d $folder_path) {if (mkdir $folder_path){}}
 $folder_path='/var/vdcsitemanager/nodes-scripts/';if (!-d $folder_path) {if (mkdir $folder_path){}}
@@ -360,11 +358,10 @@ $folder_path='/var/vdcsitemanager/nodes-logs/';if (!-d $folder_path) {if (mkdir 
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-lock/';";  
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-logs/';";  
 $hsend=$hsend."scp \"".$finalscript."\" root@".$fromnodeip.":/var/vdcsitemanager/nodes-scripts/ ";
-#####$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > /dev/null 2>&1 &' ";
-$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > ".$hlogv." 2>&1 &' ";
+$hfire="fire $finalscript";
 ## for First disk  and header--work
 }
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." ";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." ";
 $hs=$hs."\n";
 $hs=$hs."php /usr/local/src/vdcsitemanager-tools/nodes-tools/sync-vm-disk-data-to-another-cluster.php ".$cephstorage." ".$cepherasureactive." ".$checkvmid." ".$totaldiskname[$ti]." ".$fromnodeip." ".$tonodeip." ".$uidx." ";
 $hs=$hs."\n";
@@ -410,13 +407,9 @@ close(OUTOAZU);
 
  ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
  $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
-#print "\n$hsend \n";
+print "\n$hsend \n";
 my $cmdxoutx=`$hsend`;
-
-#print "\n$hfire \n";
-$cmdxoutx=`$hfire`;
-
-print "".$curdatetime." ".$uidx." ".$checkvmid." Data-Sync Command given to Server ".$fromnodeip." ".$cmdxoutx."\n";
+print "".$curdatetime." ".$uidx." Data-Sync Process Started for VMID: ".$checkvmid." ".$cmdxoutx."\n";
 #print "".$curdatetime." ".$uidx." ".$hfire."\n";
 
 

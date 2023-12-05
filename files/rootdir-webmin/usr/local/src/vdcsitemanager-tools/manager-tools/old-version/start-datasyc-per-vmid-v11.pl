@@ -360,7 +360,7 @@ $folder_path='/var/vdcsitemanager/nodes-logs/';if (!-d $folder_path) {if (mkdir 
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-lock/';";  
 ##$hsend=$hsend."ssh root@".$tonodeip." 'mkdir -p /var/vdcsitemanager/nodes-logs/';";  
 $hsend=$hsend."scp \"".$finalscript."\" root@".$fromnodeip.":/var/vdcsitemanager/nodes-scripts/ ";
-#####$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > /dev/null 2>&1 &' ";
+##$hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > /dev/null 2>&1 &' ";
 $hfire=$hfire."ssh root@".$fromnodeip." 'nohup ".$finalscript." > ".$hlogv." 2>&1 &' ";
 ## for First disk  and header--work
 }

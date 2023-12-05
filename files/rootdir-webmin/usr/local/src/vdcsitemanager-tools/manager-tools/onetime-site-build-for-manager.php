@@ -25,19 +25,19 @@ if (isset($node_data['nodelist'])) {
     foreach ($node_data['nodelist'] as $nodeName => $nodeDetails) {
         echo "Node Name: $nodeName, IP: {$nodeDetails['ip']}\n";
 $cmdx="scp -r /usr/local/src/vdcsitemanager-tools root@".$nodeDetails['ip'].":/usr/local/src/";
-print "\n $cmdx \n";
+print "$cmdx \n";
 `$cmdx`;
 $cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/';";
-print "\n $cmdx \n";
+print "$cmdx \n";
 `$cmdx`;
 $cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/nodes-scripts/';";
-print "\n $cmdx \n";
+print "$cmdx \n";
 `$cmdx`;
 $cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/nodes-lock/';";
-print "\n $cmdx \n";
+print "$cmdx \n";
 `$cmdx`;
 $cmdx="ssh root@".$nodeDetails['ip']." 'mkdir -p /var/vdcsitemanager/nodes-logs/';";
-print "\n $cmdx \n";
+print "$cmdx \n";
 `$cmdx`;
 
 
