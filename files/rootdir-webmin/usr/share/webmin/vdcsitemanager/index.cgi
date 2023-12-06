@@ -71,9 +71,9 @@ $cephmeta='-metadata';
 }
 print "<center>";
   print ui_table_start('Cluster\'s Data Sync : Ceph-Storage: '.$cephstorage.' '.$cepherasuremsg, 'width=100% align=center',undef, 3);
-  print ui_table_row('<a href=\'index.cgi?fun=datavmlist\'>Data Sync Schedule VM List</a>');
-  print ui_table_row('<a href=\'index.cgi?fun=datasyncstatus\'>Active VM Data Sync Status</a>');
   print ui_table_row('<a href=\'index.cgi?fun=clustervmlist\'>List of VMs in Clusters</a>');
+  print ui_table_row('<a href=\'index.cgi?fun=datasyncstatus\'>Active VM Data Sync Status</a>');
+  print ui_table_row('<a href=\'index.cgi?fun=datavmlist\'>Active VM Data Sync Schedule List</a>');
   print ui_table_row('<a href=\'index.cgi?fun=license\'>License</a>');
   print ui_table_end();
 my $maxsiteinfo=5;
@@ -498,7 +498,7 @@ while (my $file = readdir($dh)) {
     if ($file =~ /\.lock$/) {  # Check for files with the .local extension
 
 $file=~ s/-datasync.lock/""/eg;
-        print "$file\n";
+#        print "$file\n";
 
 $activevm[$ai]=$file;
 $ai++;

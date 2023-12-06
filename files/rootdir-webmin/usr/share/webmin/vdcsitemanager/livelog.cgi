@@ -5,6 +5,7 @@ use warnings;
 use CGI qw(:standard);
 use JSON::PP;
 
+my $maxstartline=200;
 
 use DBI;
 use WebminCore;
@@ -35,7 +36,7 @@ print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$in{'starttime'}."</td>";
 print "</tr>";
 print "</table>";
-my $cmdx="ps auwx | grep \"ssh root\@".$in{'fromnodeip'}." tail -f /var/vdcsitemanager/nodes-logs/".$in{'vmid'}."-datasync.log\" |grep -v grep | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/ /|/g' | cut -d '|' -f 2";
+my $cmdx="ps auwx | grep \"ssh root\@".$in{'fromnodeip'}." tail -n ".$maxstartline." -f /var/vdcsitemanager/nodes-logs/".$in{'vmid'}."-datasync.log\" |grep -v grep | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/ /|/g' | cut -d '|' -f 2";
 
 #print "<hr>$cmdx<hr>";
 my $cmdout=`$cmdx`;
@@ -53,10 +54,11 @@ my $cmdout=`$cmdx`;
 print "<pre>";
 STDOUT->autoflush(1); 
 
-open(my $fh, '-|', 'ssh', 'root@'.$in{'fromnodeip'}.'', 'tail', '-f', '/var/vdcsitemanager/nodes-logs/'.$in{'vmid'}.'-datasync.log') or die "Cannot open file: $!";
+open(my $fh, '-|', 'ssh', 'root@'.$in{'fromnodeip'}.'', 'tail', '-n',''.$maxstartline.'' ,'-f', '/var/vdcsitemanager/nodes-logs/'.$in{'vmid'}.'-datasync.log') or die "Cannot open file: $!";
 
 while (my $line = <$fh>) {
     print $line;
+##STDOUT->flush(1); 
 }
 
 close($fh);
