@@ -4,11 +4,11 @@ use strict;
 use warnings;
 use JSON::PP; 
 
+
 use DBI;
 use WebminCore;
   init_config();
 
-my $lockvm=0;
 &ReadParse();
 my $datasyncvmconfigfolder='/etc/webmin/vdcsitemanager/data-sync-vm-config';
 my $showheadernow=1;
@@ -401,73 +401,13 @@ if($in{'mactive'} eq "SYNC-START"){$cmdstart=$cmdstart." activate start";}
 
 #print "<hr> $cmdstart  <hr>";
 
-my $hlock="/var/vdcsitemanager/nodes-lock/".$checkvmid."-datasync.lock";
-if (-e $hlock) {
-$lockvm=1;
-}
-if($lockvm==0)
-{
 my $cmdxout=`$cmdstart`;
 print "<strong><font color=green> Manual Activity started as on ".$curdatetime."</font></strong><br>";
-}
-my $pop='<script>
-function popupboxfull(x,h1,w1)
-{
-var w=screen.width;var h=screen.height;
-var livephonewin=window.open(x, "_blank", "toolbar=no, scrollbars=yes, resizable=yes, top="+h+", left="+w+", width="+w1+", height="+h1+"");
-}
-</script>
-';
-
-print $pop;
-
-
-my $uidx="";
-my $fromnodeip="";
-my $tonodeip="";
-my $starttime="";
-open(OUTOAZ,"<$hlock");
-while(<OUTOAZ>)
-{
-#    print "".$curdatetime." ".$uidx." ";
-#$print $_;
-my $linex=$_;
-$linex=~ s/\n/""/eg;
-$linex=~ s/\r/""/eg;
-$linex=~ s/\t/""/eg;
-$linex=~ s/\0/""/eg;
-my @lx = split(/=/, $linex);
-if($lx[0] eq "UIDX"){$uidx=$lx[1];}
-if($lx[0] eq "FROMNODEIP"){$fromnodeip=$lx[1];}
-if($lx[0] eq "TONODEIP"){$tonodeip=$lx[1];}
-if($lx[0] eq "STARTTIME"){$starttime=$lx[1];}
-}
-close(OUTOAZ);
-
-print "<table border=1>";
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>PROCESS ID</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>VMID</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>FROM NODE IP</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>TO NODE IP</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>START TIME</td>";
-print "</tr>";
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"#\" onClick=\"popupboxfull('livelog.cgi?uidx=".$uidx."&vmid=".$checkvmid."&fromnodeip=".$fromnodeip."&tonodeip=".$tonodeip."&starttime=".$starttime."&showlivelog=1',800,800);return false;\">".$uidx."</a></td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$checkvmid."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$fromnodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$tonodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$starttime."</td>";
-print "</tr>";
-print "</table>";
-
-
-exit;
 ### update of config done and also cron updated code
 }
 
 my $hlock="/var/vdcsitemanager/nodes-lock/".$checkvmid."-datasync.lock";
- $lockvm=0;
+my $lockvm=0;
 if (-e $hlock) {
 $lockvm=1;
 my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
