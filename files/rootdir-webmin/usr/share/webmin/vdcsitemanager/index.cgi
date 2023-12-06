@@ -563,7 +563,7 @@ print "</tr>";
 my $aj=$ai+1;
 print "<tr>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$aj."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"#\" onClick=\"popupboxfull('livelog.cgi?uidx=".$uidx."&vmid=".$activevm[$ai]."&fromnodeip=".$fromnodeip."&tonodeip=".$tonodeip."&showlivelog=1',800,800);return false;\">".$uidx."</a></td>";
+print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"#\" onClick=\"popupboxfull('livelog.cgi?uidx=".$uidx."&vmid=".$activevm[$ai]."&fromnodeip=".$fromnodeip."&tonodeip=".$tonodeip."&starttime=".$starttime."&showlivelog=1',800,800);return false;\">".$uidx."</a></td>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$activevm[$ai]."</td>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$fromnodeip."</td>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$tonodeip."</td>";
