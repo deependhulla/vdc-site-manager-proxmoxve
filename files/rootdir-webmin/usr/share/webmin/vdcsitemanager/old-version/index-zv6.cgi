@@ -71,8 +71,8 @@ $cephmeta='-metadata';
 }
 print "<center>";
   print ui_table_start('Cluster\'s Data Sync : Ceph-Storage: '.$cephstorage.' '.$cepherasuremsg, 'width=100% align=center',undef, 3);
-  print ui_table_row('<a href=\'index.cgi?fun=datavmlist\'>Data Sync Schedule VM List</a>');
-  print ui_table_row('<a href=\'index.cgi?fun=datasyncstatus\'>Active VM Data Sync Status</a>');
+  print ui_table_row('<a href=\'index.cgi?fun=datavmlist\'>Data Sync VMs List</a>');
+  print ui_table_row('<a href=\'index.cgi?fun=datasyncstatus\'>Data Sync VM Status</a>');
   print ui_table_row('<a href=\'index.cgi?fun=clustervmlist\'>List of VMs in Clusters</a>');
   print ui_table_row('<a href=\'index.cgi?fun=license\'>License</a>');
   print ui_table_end();
@@ -487,101 +487,11 @@ my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}pr
 ##############################
 if($fun eq "datasyncstatus")
 {
-print "<h4>Active VM Data Sync Status.</h4>";
-my $hlock = '/var/vdcsitemanager/nodes-lock/';  # Replace this with your folder path
-my @activevm=();
-my $ai=0;
-opendir(my $dh, $hlock) or die "Cannot open directory: $!";
-
-while (my $file = readdir($dh)) {
-    next unless (-f "$hlock/$file");  # Check if it's a file
-    if ($file =~ /\.lock$/) {  # Check for files with the .local extension
-
-$file=~ s/-datasync.lock/""/eg;
-        print "$file\n";
-
-$activevm[$ai]=$file;
-$ai++;
-    }
-}
-
-closedir($dh);
-
-if($ai==0)
-{
-print "No Active Session.";
-}
-## got information.
-if($ai>0)
-{
-my $pop='<script>
-function popupboxfull(x,h1,w1)
-{
-var w=screen.width;var h=screen.height;
-var livephonewin=window.open(x, "_blank", "toolbar=no, scrollbars=yes, resizable=yes, top="+h+", left="+w+", width="+w1+", height="+h1+"");
-}
-</script>
-';
-
-print $pop;
-
-for($ai=0;$ai<@activevm;$ai++)
-{
-my $hlock="/var/vdcsitemanager/nodes-lock/".$activevm[$ai]."-datasync.lock";
-my $uidx="";
-my $fromnodeip="";
-my $tonodeip="";
-my $starttime="";
-open(OUTOAZ,"<$hlock");
-while(<OUTOAZ>)
-{
-#    print "".$curdatetime." ".$uidx." ";
-#$print $_;
-my $linex=$_;
-$linex=~ s/\n/""/eg;
-$linex=~ s/\r/""/eg;
-$linex=~ s/\t/""/eg;
-$linex=~ s/\0/""/eg;
-my @lx = split(/=/, $linex);
-if($lx[0] eq "UIDX"){$uidx=$lx[1];}
-if($lx[0] eq "FROMNODEIP"){$fromnodeip=$lx[1];}
-if($lx[0] eq "TONODEIP"){$tonodeip=$lx[1];}
-if($lx[0] eq "STARTTIME"){$starttime=$lx[1];}
-}
-close(OUTOAZ);
-if($ai==0){
-print "<table border=1>";
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>Sr.</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>PROCESS ID</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>VMID</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>FROM NODE IP</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>TO NODE IP</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>START TIME</td>";
-print "</tr>";
-}
-my $aj=$ai+1;
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$aj."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"#\" onClick=\"popupboxfull('livelog.cgi?uidx=".$uidx."&vmid=".$activevm[$ai]."&fromnodeip=".$fromnodeip."&tonodeip=".$tonodeip."&showlivelog=1',800,800);return false;\">".$uidx."</a></td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$activevm[$ai]."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$fromnodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$tonodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$starttime."</td>";
-print "</tr>";
-
-
-### for loop for activevm --over
-}
-print "</table>";
-### got info for some vm --over
-}
-
-#/var/vdcsitemanager/nodes-lock/
+print "DATA Sync VM Logs";
 
 #####
 }
-######Live Data Sync Info -end##################
+########################
 
 
 ##############################  
