@@ -1,0 +1,8 @@
+
+#rsync -av /opt/vdc-site-manager-proxmoxve/files/rootdir-webmin/usr/share/webmin/vdcsitemanager /usr/share/webmin/
+#rsync -av /opt/vdc-site-manager-proxmoxve/files/rootdir-webmin/usr/local/src/vdcsitemanager-tools /usr/local/src/
+#cd /usr/local/src/vdcsitemanager-tools/manager-tools/
+#php onetime-site-build-for-manager.php 1 192.168.40.146
+#php onetime-site-build-for-manager.php 2 192.168.30.112
+ 
+
