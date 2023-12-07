@@ -53,11 +53,11 @@ print "LOG : $hlog\n";
 $drimg=$keyimg;
 $cmdx="ssh -p ".$drserversshport." ".$drserversship." rbd ls ".$cephpool." | grep ".$drimg."";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="CHECK IF IMG THERE ON REMOTE SERVER\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -74,11 +74,11 @@ if($cephpoolec==1)
 $cmdx="ssh -p ".$drserversshport." ".$drserversship." rbd create ".$drimg." -s 1 --data-pool ".$cephdata." --pool ".$cephpool."";
 }
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="CREATING FIRST TIME IMG ON REMOTE SERVER\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -93,11 +93,11 @@ $curtime=date('Y-m-d_h-i-s')."__".microtime(true);
 
 $cmdx="rbd snap ls ".$cephpool."/".$keyimg." | grep ".$curtime."";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="CHECK IF BY MISTAKE CURTIME SNAPSHOT ON SOURCE IS THERE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -110,11 +110,11 @@ if($cmdxout=="")
 $cmdx="rbd snap create ".$cephpool."/".$keyimg."@".$curtime."";
 if($debugnow==1){
 
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="CREATE SNAPSHOT ON SOURCE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -127,11 +127,11 @@ $cmdxout=`$cmdx`;$cmdxout=str_replace("\n","",$cmdxout);$cmdxout=str_replace("\r
 
 $cmdx="ssh -p ".$drserversshport." ".$drserversship."  rbd snap ls ".$cephpool."/".$drimg." 2>/dev/null | grep -v \"SNAPID\" | sort -rn | head -n 1 |awk '{print $2}'";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="CHECK IF SNAPSHOT ON REMOTE IS THERE AND GET LAST SNAPSNOT-IMAGE-NAME\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -144,11 +144,11 @@ if($lastsnapid=="")
 {
 $cmdx="rbd export-diff ".$cephpool."/".$keyimg."@".$curtime." - | ssh -p ".$drserversshport." ".$drserversship." rbd import-diff - ".$cephpool."/".$drimg."  ";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="TRANSFER THE FIRST SNAPSHOT TO REMOTE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -163,11 +163,11 @@ if($lastsnapid!="")
 $lastsnapid=$cmdxout;
 $cmdx="rbd export-diff --from-snap ".$lastsnapid." ".$cephpool."/".$keyimg."@".$curtime." - | ssh -p ".$drserversshport." ".$drserversship." rbd import-diff - ".$cephpool."/".$drimg."  ";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="TRANSFER THE LATEST SNAPSHOT TO REMOTE FROM LASTSNAPSHOT IT HAD ON REMOTE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -179,15 +179,15 @@ system($cmdx);
 
 $cmdx="ssh -p ".$drserversshport." ".$drserversship."  rbd snap ls ".$cephpool."/".$drimg." 2>/dev/null | grep -v \"SNAPID\" | sort -rn |awk '{print $2}'";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="CHECK IF SNAPSHOT ON REMOTE IS THERE AND GET LAST SNAPSHOT-IMAGE-NAME FOR VERIFY\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="AND WORK ON CLEAN UP OF OLD SNAPSHOT IF ANY (KEEP $keeplastsnapshot)\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -210,11 +210,11 @@ if($todelnow==1)
 {
 $cmdx="ssh -p ".$drserversshport." ".$drserversship."  rbd snap remove ".$cephpool."/".$drimg."@".$snaplist[$i]." 2>/dev/null ";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="REMOVE OLD SNAPSHOT ON REMOTE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -229,11 +229,11 @@ system($cmdx);
 
 $cmdx="rbd snap ls ".$cephpool."/".$keyimg." 2>/dev/null | grep -v \"SNAPID\" | sort -rn |awk '{print $2}'";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="WORK ON CLEAN UP OF OLD SNAPSHOT IF ANY ON LOCAL (KEEP $keeplastsnapshot)\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -253,11 +253,11 @@ if($todelnow==1)
 {
 $cmdx=" rbd snap remove ".$cephpool."/".$keyimg."@".$snaplist[$i]." 2>/dev/null ";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="REMOVE OLD SNAPSHOT ON REMOTE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -269,11 +269,11 @@ system($cmdx);
 
 $cmdx="rbd du '".$cephpool."/".$keyimg."' ";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="RDB DU INFO LOCAL\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
@@ -284,18 +284,18 @@ print $cmdxout;
 
 $cmdx="ssh -p ".$drserversshport." ".$drserversship."  rbd du '".$cephpool."/".$keyimg."' ";
 if($debugnow==1){
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx="RDB DU INFO REMOTE\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 $logx=$cmdx."\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 }
 $cmdxout=`$cmdx`;
 print $cmdxout;
-$logx="".date('Y-m-d H:i:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
+$logx="".date('Y-m-d H:m:s')." ".$uidx." ".$checkvmid." ".$keyimg." ";
 $logx="DATA-SYNC-TASK of  ".$keyimg." DONE : OK\n";
 print $logx;file_put_contents($hlog,$logx,FILE_APPEND);
 
