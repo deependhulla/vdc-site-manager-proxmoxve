@@ -148,7 +148,7 @@ my $nodesship=$siteinfonodeip[$si][0];
 my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-disk-name-of-all-vm.pl";
 #print "$cmdx";
 my $csvdata=`$cmdx`;
-if($si!=0){$csvline=$csvline."\n\n";}
+$csvline=$csvline."";
 print "<table border='1'>\n";
 my @rows = split(/\n/, $csvdata);
 my $rx=0;my $tcolx=0;
@@ -156,14 +156,6 @@ my $tbgcol="#FFFAF0";
 foreach my $row (@rows) {
 my $showallow=1;
 
-if($rx==0){
-$csvline=$csvline."\"SITE\",";
-}
-else
-{
-
-$csvline=$csvline."\"".$siteinfoname[$si]."\",";
-}
     $row =~ s/"//g; # Remove quotes
     my @columns = split(/,/, $row);
 if($rx==0){$tcolx=@columns;}$rx++;

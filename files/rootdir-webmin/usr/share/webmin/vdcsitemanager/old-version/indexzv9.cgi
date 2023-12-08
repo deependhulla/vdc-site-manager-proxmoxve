@@ -8,7 +8,6 @@ use DBI;
 use WebminCore;
   init_config();
 
-my $csvline="";
 my $lockvm=0;
 &ReadParse();
 my $datasyncvmconfigfolder='/etc/webmin/vdcsitemanager/data-sync-vm-config';
@@ -148,7 +147,6 @@ my $nodesship=$siteinfonodeip[$si][0];
 my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-disk-name-of-all-vm.pl";
 #print "$cmdx";
 my $csvdata=`$cmdx`;
-if($si!=0){$csvline=$csvline."\n\n";}
 print "<table border='1'>\n";
 my @rows = split(/\n/, $csvdata);
 my $rx=0;my $tcolx=0;
@@ -156,14 +154,6 @@ my $tbgcol="#FFFAF0";
 foreach my $row (@rows) {
 my $showallow=1;
 
-if($rx==0){
-$csvline=$csvline."\"SITE\",";
-}
-else
-{
-
-$csvline=$csvline."\"".$siteinfoname[$si]."\",";
-}
     $row =~ s/"//g; # Remove quotes
     my @columns = split(/,/, $row);
 if($rx==0){$tcolx=@columns;}$rx++;
@@ -185,32 +175,10 @@ if ($columndata =~ /:/) {
 $showallow=0;
 }
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
-my $columndata2=$columndata;
-
-
-if($rx!=1 && ( $colx==10 || $colx==12 || $colx==14 || $colx==16 || $colx==18 || $colx==20 || $colx==22 || $colx==24 || $colx==26 || $colx==28) ){
-my $xdisksize=$columndata2;
-if ($xdisksize =~ /^(\d+)([GMT])$/) {
-    my $xsize = $1;
-    my $xunit = $2;
-
-    if ($xunit eq 'T') {
-        $xsize *= 1024; # Convert TB to GB
-    }
-elsif ($xunit eq 'M') {
-        $xsize /= 1024; # Convert MB to GB
-    }
-	$columndata2=$xsize;
-}
-##$columndata2="XXX";
-}
-
-$csvline=$csvline.'"'.$columndata2.'",';
     }
 #print $colx."xx --> $tcolx;\n";
 for(my $ci=$colx;$ci<$tcolx;$ci++)
 {
-$csvline=$csvline.'"-",';
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>-</tD>";
 }
 
@@ -239,17 +207,13 @@ print "<td style=\"border: 1px solid;".$extracss."background-color:".$tbgcolvid.
 $tbgcol="#FAF0E6";
 
 
-$csvline=$csvline."\n";
 
     print "</tr>\n";
 }
 print "</table>";
-
-
 ##for loop for site is over
 }
 
-print "Download Inventory CSV List<hr><pre>".$csvline;
 ###
 }
 
