@@ -12,6 +12,11 @@ apt-get -y install webmin
 
 ## copies all program of VDC
 /bin/cp -pR files/rootdir-webmin/* /
+mkdir -p  /var/vdcsitemanager/nodes-config-backup/
+mkdir -p  /var/vdcsitemanager/nodes-scripts/
+mkdir -p  /var/vdcsitemanager/nodes-logs/
+mkdir -p  /var/vdcsitemanager/nodes-lock/
+
 mkdir -p /etc/webmin/vdcsitemanager/siteinfo
 mkdir /etc/webmin/vdcsitemanager/data-sync-vm-config
 mkdir -p /var/log/vdcsitemanager-logs
