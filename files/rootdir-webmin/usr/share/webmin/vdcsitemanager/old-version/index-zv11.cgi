@@ -249,19 +249,7 @@ print "</table>";
 ##for loop for site is over
 }
 
-my $downloadcsvinfo=time();
-my $csvfile="";
-
-my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
-my $curdatetime = sprintf("%04d-%02d-%02d_%02d-%02d-%02d", $year, $mon, $mday, $hour, $min, $sec);
-my $downloadcsvinfo=$curdatetime."---".time();
-my $csvfile="/tmp/read-".$downloadcsvinfo;
-open(OUTOAZ,">$csvfile");
-print OUTOAZ $csvline;
-close(OUTOAZ);
-
-print "<br><br><a href=\"downloadcsvinfo.cgi?tmpfile=".$downloadcsvinfo."&\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">Download VM Inventory CSV List</a><hr><br><br>";
-#<pre>".$csvline;
+print "Download Inventory CSV List<hr><pre>".$csvline;
 ###
 }
 
