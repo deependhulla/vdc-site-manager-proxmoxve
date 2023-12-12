@@ -5,7 +5,7 @@ use warnings;
 use JSON::PP; 
 
 my $debugnow=0;
-my $waitsec=10;
+
 my $vdcip=`hostname -i`;
 $vdcip=~ s/\n/""/eg;
 $vdcip=~ s/\r/""/eg;
@@ -16,7 +16,6 @@ $vdcip=~ s/ /""/eg;
 ## means datasync on node 3
 my $datasyncnodeid=1;
 my $hs="";
-my $hs1="";
 my $hsend="";
 my $hfire="";
 my $hlog="";
@@ -396,23 +395,12 @@ $hsend=$hsend."scp \"".$finalscript."\" root@".$fromnodeip.":/var/vdcsitemanager
 $hfire=$hfire."ssh root@".$fromnodeip." 'nohup bash ".$finalscript." > ".$hlogv." 2>&1 &' ";
 ## for First disk  and header--work
 }
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \"  ";
-$hs=$hs."\n";
 $hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." ";
 $hs=$hs."\n";
 $hs=$hs."php /usr/local/src/vdcsitemanager-tools/nodes-tools/sync-vm-disk-data-to-another-cluster.php ".$cephstorage." ".$cepherasureactive." ".$checkvmid." ".$totaldiskname[$ti]." ".$fromnodeip." ".$tonodeip." ".$uidx." ";
 $hs=$hs."\n";
 $hs=$hs."";
 $hs=$hs."";
-####### for stop or shutdown -- resync
-$hs1=$hs1."\n";
-$hs1=$hs1."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Final-Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" ";
-$hs1=$hs1."\n";
-$hs1=$hs1."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." Final-Disk-Sync ".$tj." of ".$tdisk." : ".$totaldiskname[$ti]." SIZE: ".$totaldisksize[$ti]." of VM ID ".$checkvmid." from ".$fromnodeip." to ".$tonodeip."  \" >> ".$hlog." ";
-$hs1=$hs1."\n";
-$hs1=$hs1."php /usr/local/src/vdcsitemanager-tools/nodes-tools/sync-vm-disk-data-to-another-cluster.php ".$cephstorage." ".$cepherasureactive." ".$checkvmid." ".$totaldiskname[$ti]." ".$fromnodeip." ".$tonodeip." ".$uidx." ";
-$hs1=$hs1."\n";
-$hs=$hs."\n";
 
 ## for loop of valid Disk over
 }
@@ -450,15 +438,10 @@ my $cmdcopyout=`$copycmdx`;
 $hs=$hs."\n";
 $hs=$hs."qm shutdown ".$checkvmid." \n";
 $hs=$hs."\n";
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip." wait ".$waitsec." seconds \"  ";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip."  \"  ";
 $hs=$hs."\n";
-$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip." wait ".$waitsec." secounds \" >> ".$hlog." ";
+$hs=$hs."echo \"`date +'%Y-%m-%d %H:%M:%S'` ".$uidx." ".$checkvmid." VM Shutdown triggered on ".$fromnodeip."  \" >> ".$hlog." ";
 $hs=$hs."\n";
-$hs=$hs."sleep ".$waitsec."";
-$hs=$hs."\n";
-$hs=$hs.$hs1;
-$hs=$hs."\n";
-
 my $xcopycmdx="/bin/mv -v /etc/pve/nodes/".$fromnodename."/".$vmtype."/".$checkvmid.".conf /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf; scp /var/vdcsitemanager/nodes-config-backup/".$checkvmid."-".$uidx."-from-".$fromnodename."-to-".$tonodename.".conf root@".$tonodeip.":/etc/pve/nodes/".$tonodename."/".$vmtype."/".$checkvmid.".conf";
 #print "\n $xcopycmdx \n";
 $hs=$hs.$xcopycmdx;
