@@ -141,7 +141,7 @@ if($fun eq "clustervmlist")
 #$siteinfonodeip[$si][$ri]
 for($si=0;$si<@siteinfo;$si++)
 {
-print "<h4>List of VMs in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h4>\n";
+print "<h4>List of VMs in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h4>";
 my $nodesship=$siteinfonodeip[$si][0];
 ## get Site VM Info
 ##my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-list-of-vm-in-cluster.pl";
@@ -260,11 +260,7 @@ open(OUTOAZ,">$csvfile");
 print OUTOAZ $csvline;
 close(OUTOAZ);
 
-print "<br><br><a href=\"downloadcsvinfo.cgi?tmpfile=".$downloadcsvinfo."&\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">Download Basic VM Inventory CSV List</a>  ";
-print "&nbsp;&nbsp;&nbsp;";
-print "| ";
-print "&nbsp;&nbsp;&nbsp;";
-print " <a href=\"downloaddetailinfo.cgi?tmpfile=".$downloadcsvinfo."&\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">Download VM Detailed Live Inventory CSV List (Takes time to generate)</a><hr><br><br>";
+print "<br><br><a href=\"downloadcsvinfo.cgi?tmpfile=".$downloadcsvinfo."&\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">Download VM Inventory CSV List</a><hr><br><br>";
 #<pre>".$csvline;
 ###
 }
