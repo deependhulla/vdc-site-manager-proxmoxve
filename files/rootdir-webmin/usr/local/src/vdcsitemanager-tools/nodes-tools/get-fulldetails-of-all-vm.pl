@@ -10,6 +10,20 @@ my $cephpool=$ARGV[1];
 my $cepherasureactive=$ARGV[2];
 my $qemuipi=0;
 my $decoded="";
+
+if($cepherasureactive eq "" || $cephpool eq "" || $cephstorage eq "")
+{
+
+print "Please Pass <ceph storage name> <ceph pool name> <erasurecode> <DO WORD>\n";
+print "get-fulldetails-of-all-vm.pl starceph starceph 0 DO";
+print "\n";
+print "OR for Erasurecode\n";
+print "get-fulldetails-of-all-vm.pl cephdata cephdata-metadata 1 DO";
+print "\n";
+exit;
+}
+
+
 # Attempt to decode JSON and check for errors
 sub is_valid_json {
     my $str = shift;
