@@ -9,7 +9,7 @@ use DBI;
 use WebminCore;
   init_config();
 &ReadParse();
-
+STDOUT->autoflush(1);
 my $csvline="";
 my $lockvm=0;
 &ReadParse();
@@ -141,8 +141,8 @@ for($si=0;$si<@siteinfo;$si++)
 my $nodesship=$siteinfonodeip[$si][0];
 ## get Site VM Info
 ##my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-list-of-vm-in-cluster.pl";
-            my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-fulldetails-of-all-vm.pl ".$cephstorage." ".$cephstorage.$cephmeta." ".$cepherasureactive." DO";
-print "$cmdx\n";
-#my $csvdata=`$cmdx`;
-
+my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-fulldetails-of-all-vm.pl ".$cephstorage." ".$cephstorage.$cephmeta." ".$cepherasureactive." DO";
+#print "$cmdx\n";
+my $csvdata=`$cmdx`;
+print $csvdata;
 }
