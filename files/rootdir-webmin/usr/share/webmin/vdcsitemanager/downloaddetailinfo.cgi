@@ -130,10 +130,12 @@ if($si!=0){
 
 #print "<hr>";
 
+my $downloadcsvinfo=$in{'tmpfile'};
+my @rows = split(/---/, $downloadcsvinfo);
 
-#print "Content-type: text/csv\n";
-#print "Content-Disposition: attachment; filename=cluster-vm-info-".$rows[0].".csv\n\n";
-print "Content-type: text/plain\n\n";
+print "Content-type: text/csv\n";
+print "Content-Disposition: attachment; filename=cluster-vm-detailed-info-".$rows[0].".csv\n\n";
+#print "Content-type: text/plain\n\n";
 
 for($si=0;$si<@siteinfo;$si++)
 {
