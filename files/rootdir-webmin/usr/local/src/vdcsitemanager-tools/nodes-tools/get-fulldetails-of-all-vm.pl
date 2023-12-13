@@ -253,8 +253,8 @@ my $qemuonline='';
 my $qemuip='';
 $qemuonline='Agent-In-Active';
 $vmonline="Offline";
-
-my $cmdz="pvesh get /nodes/".$vmnode."/qemu/".$vmid."/agent/get-osinfo --output-format=json 2>/tmp/log-".$vmid."-getosinfo";
+if($vmtype eq "lxc"){$qemuonline='Container';}
+my $cmdz="pvesh get /nodes/".$vmnode."/".$vmtype."/".$vmid."/agent/get-osinfo --output-format=json 2>/tmp/log-".$vmid."-getosinfo";
 #print "\n$cmdz\n";
 my $gcmdout=`$cmdz`;
 $gcmdout=~ s/\n//g;
@@ -271,7 +271,11 @@ $qemuonline='Agent-Active';
 }
 ########################################
 ########################################
-$cmdz="pvesh get /nodes/".$vmnode."/qemu/".$vmid."/agent/network-get-interfaces --output-format=json 2>/tmp/log-".$vmid."-getinterfaces";
+$cmdz="pvesh get /nodes/".$vmnode."/".$vmtype."/".$vmid."/agent/network-get-interfaces --output-format=json 2>/tmp/log-".$vmid."-getinterfaces";
+if($vmtype eq "lxc")
+{
+$cmdz="pvesh get /nodes/".$vmnode."/".$vmtype."/".$vmid."/interfaces --output-format=json 2>/tmp/log-".$vmid."-getinterfaces";
+}
 #print "\n$cmdz\n";
  $gcmdout=`$cmdz`;$gcmdout=~ s/\n//g;$gcmdout=~ s/\t//g;$gcmdout=~ s/\0//g;$qemuip="";
  $qemuipi=0;
@@ -294,7 +298,7 @@ $qemuonline='Agent-Active';
 
 ########################################
 ########################################
-$cmdz="pvesh get /nodes/".$vmnode."/qemu/".$vmid."/status/current --output-format=json 2>/tmp/log-".$vmid."-getcurrent";
+$cmdz="pvesh get /nodes/".$vmnode."/".$vmtype."/".$vmid."/status/current --output-format=json 2>/tmp/log-".$vmid."-getcurrent";
 #print "\n$cmdz\n";
  $gcmdout=`$cmdz`;$gcmdout=~ s/\n//g;$gcmdout=~ s/\t//g;$gcmdout=~ s/\0//g;
 #print "\n $gcmdout \n";
