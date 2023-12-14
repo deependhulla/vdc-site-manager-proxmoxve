@@ -212,13 +212,19 @@ if ($columndata =~ /:/) {
 $showallow=0;
 }
 if($colx==8){
+if($rx!=1)
+{
 my $columndata2=$columndata/1024;
 $columndata=$columndata2."GB";
 }
+}
 if($colx>8){
+if($rx==1)
+{
 my $columndata3=$columndata;
 $columndata3 =~ s/ /<br>/g;
 $columndata=$columndata3."";
+}
 }
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
 my $columndata2=$columndata;
