@@ -16,7 +16,8 @@ mkdir -p  /var/vdcsitemanager/nodes-config-backup/
 mkdir -p  /var/vdcsitemanager/nodes-scripts/
 mkdir -p  /var/vdcsitemanager/nodes-logs/
 mkdir -p  /var/vdcsitemanager/nodes-lock/
-
+mkdir -p /etc/webmin/vdcsitemanager/resource-group/removedlist
+mkdir -p /etc/webmin/vdcsitemanager/resource-group/activelist
 mkdir -p /etc/webmin/vdcsitemanager/siteinfo
 mkdir /etc/webmin/vdcsitemanager/data-sync-vm-config
 mkdir -p /var/log/vdcsitemanager-logs
