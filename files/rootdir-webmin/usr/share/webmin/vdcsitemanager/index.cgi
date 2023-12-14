@@ -184,6 +184,10 @@ if ($columndata =~ /:/) {
 ## as there is another storage mapped
 $showallow=0;
 }
+if($colx==8){
+my $columndata2=$columndata/1024;
+$columndata=$columndata2."GB";
+}
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
 my $columndata2=$columndata;
 
