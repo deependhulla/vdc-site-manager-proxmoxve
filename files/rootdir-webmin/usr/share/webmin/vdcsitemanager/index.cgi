@@ -7,7 +7,7 @@ use JSON::PP;
 use DBI;
 use WebminCore;
   init_config();
-
+my $tt=-2;
 my $csvline="";
 my $lockvm=0;
 &ReadParse();
@@ -77,6 +77,16 @@ print "<center>";
   print ui_table_row('<a href=\'index.cgi?fun=datavmlist\'>Active VM Data Sync Schedule List</a>');
   print ui_table_row('<a href=\'index.cgi?fun=license\'>License</a>');
   print ui_table_end();
+
+print '<script>function suredown(url,tt)
+{
+if(confirm(\'Are you sure download can take quite sometime as it fetch nearly \'+tt+\' VMs live information. ?\'))
+{
+alert(\'a\');
+}
+}</script>';
+
+
 my $maxsiteinfo=5;
 my $mainsiteinfofolder='/etc/webmin/vdcsitemanager/siteinfo/';
 my @siteinfo=();
@@ -172,6 +182,7 @@ my $colx=0;
 my $vmid="";
 my $nodename="";
 my $vmname="";
+$tt++;
     foreach my $column (@columns) {
 $colx++;
 my $columndata=$column;
@@ -187,6 +198,8 @@ $showallow=0;
 if($colx==8){
 my $columndata2=$columndata/1024;
 $columndata=$columndata2."GB";
+}
+if($colx==8){
 }
 print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
 my $columndata2=$columndata;
@@ -268,7 +281,8 @@ print "<br><br><a href=\"downloadcsvinfo.cgi?tmpfile=".$downloadcsvinfo."&\" tar
 print "&nbsp;&nbsp;&nbsp;";
 print "| ";
 print "&nbsp;&nbsp;&nbsp;";
-print " <a href=\"downloaddetailinfo.cgi?tmpfile=".$downloadcsvinfo."&\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">Download VM Detailed Live Inventory CSV List (Takes time to generate)</a><hr><br><br>";
+#######print " <a href=\"downloaddetailinfo.cgi?tmpfile=".$downloadcsvinfo."&\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\" onClick='suredown('downloaddetailinfo.cgi?tmpfile=".$downloadcsvinfo."&\');return false;'>Download VM Detailed Live Inventory CSV List (Takes time to generate)</a><hr><br><br>";
+print " <a href=\"#\" target=\"_blank\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\" onClick=\"suredown('downloaddetailinfo.cgi?tmpfile=".$downloadcsvinfo."&','".$tt."');return false;\">Download VM Detailed Live Inventory CSV List (Takes time to generate)</a><hr><br><br>";
 #<pre>".$csvline;
 ###
 }
@@ -472,6 +486,7 @@ function popupboxfull(x,h1,w1)
 var w=screen.width;var h=screen.height;
 var livephonewin=window.open(x, "_blank", "toolbar=no, scrollbars=yes, resizable=yes, top="+h+", left="+w+", width="+w1+", height="+h1+"");
 }
+
 </script>
 ';
 
