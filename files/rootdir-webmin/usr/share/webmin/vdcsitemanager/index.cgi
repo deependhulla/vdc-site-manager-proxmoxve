@@ -82,7 +82,7 @@ print '<script>function suredown(url,tt)
 {
 if(confirm(\'Are you sure download can take quite sometime as it fetch nearly \'+tt+\' VMs live information. ?\'))
 {
-alert(\'a\');
+window.open(url, \'_blank\');
 }
 }</script>';
 
