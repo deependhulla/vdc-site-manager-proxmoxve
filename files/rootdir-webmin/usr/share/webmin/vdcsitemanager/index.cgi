@@ -326,7 +326,7 @@ print "Active VM Data Sync Schedule List.: Comming soon";
 ##############################
 if($fun eq "resourcegroup")
 {
-print "<h4>Resource Group</b>";
+print "<h4>Resource Group</h4><br> ..Upcomming";
 
 #####
 }
