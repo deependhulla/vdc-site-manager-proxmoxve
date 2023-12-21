@@ -632,6 +632,68 @@ my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}pr
 ##### OVER if loop
 }
 #####DATA SYNC VM ID SECITON OVER#########################
+##############################
+##############################
+##############################
+if($fun eq "datasyncdonestatus")
+{
+print "<h4>Completed VM Data Sync Status.</h4>";
+my @cmvm=();
+my $ai=0;
+my $hlock = '/var/vdcsitemanager/nodes-logs/';  # Replace this with your folder path
+opendir(my $dh, $hlock) or die "Cannot open directory: $!";
+
+while (my $file = readdir($dh)) {
+    next unless (-f "$hlock/$file");  # Check if it's a file
+    if ($file =~ /\.log$/) {  # Check for files with the .local extension
+#$file=~ s/-datasync.log/""/eg;
+        print "$file <br>\n";
+$cmvm[$ai]['filename']=$file;
+$cmvm[$ai]['vmid']='';
+$cmvm[$ai]['processid']='';
+$cmvm[$ai]['starttime']='';
+$cmvm[$ai]['endtime']='';
+
+my $filelog=$hlock."".$file;
+$ai++;
+my $ij=0;
+open(OUTOAZ,"<$filelog");
+while(<OUTOAZ>)
+{
+my @l1=split(" ",$_);
+my @l2=split("from",$_);
+my @l3=split(" ",@l2[1]);
+if($ij==0)
+{
+print $_;
+print "<hr>";
+print " --> ".$l1[0]." ".$l1[1];
+print " --> ".$l3[2];
+print "<hr>";
+$cmvm[$ai]['starttime']=$l1[0]." ".$l1[1];
+#print "<hr>";
+## for first line only
+}
+$cmvm[$ai]['endtime']=$l1[0]." ".$l1[1];
+
+$ij++;
+}
+close(OUTOAZ);
+
+## close check
+    }
+## close folder
+}
+closedir($dh);
+
+
+
+### COMPLETE LIST IF OVER
+}
+##############################
+##############################
+##############################
+##############################
 
 ##############################
 if($fun eq "datasyncstatus")
@@ -726,6 +788,16 @@ print "</table>";
 ### got info for some vm --over
 }
 
+#####################
+#####################
+#####################
+print "<hr>";
+print "<a href=\"index.cgi?fun=datasyncdonestatus\" style=\"display: inline-block; padding: 10px 15px; color: white; background-color: #007bff; text-align: center; text-decoration: none; border-radius: 5px; font-weight: bold;\">View Completed Process List</a>";
+
+#####################
+#####################
+
+#####################
 #/var/vdcsitemanager/nodes-lock/
 
 #####
