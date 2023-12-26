@@ -3,7 +3,6 @@
 use strict;
 use warnings;
 use JSON::PP; 
-use Time::Local;
 
 my @cronvalue=();my @crontitle=();my $c=0;
 require './mycronlist.pl';
@@ -636,10 +635,6 @@ my $cmdxout=`$cmdx`;$cmdxout=~ s/</""/eg;$cmdxout=~ s/>/""/eg;print $cmdxout;}pr
 if($fun eq "datasyncdonestatus")
 {
 print "<h4>Completed VM Data Sync Status.</h4>";
-my $cmdxx='/usr/local/src/vdcsitemanager-tools/manager-tools/get-logs-from-all-clusters-nodes.pl';
-my $cmdxxout='';
-$cmdxxout=`$cmdxx`;
-
 my @cmvm=();
 my $ai=0;
 my $hlock = '/var/vdcsitemanager/nodes-logs/';  # Replace this with your folder path
@@ -649,17 +644,15 @@ while (my $file = readdir($dh)) {
     next unless (-f "$hlock/$file");  # Check if it's a file
     if ($file =~ /\.log$/) {  # Check for files with the .local extension
 #$file=~ s/-datasync.log/""/eg;
-#        print "$file <br>\n";
-my @vx=split("-",$file);
-$cmvm[$ai]{'filename'}=>$file;
-$cmvm[$ai]{'vmid'}=$vx[0];
-$cmvm[$ai]{'processid'}=$vx[1];
-#$cmvm[$ai]['starttime']='';
-#$cmvm[$ai]['endtime']='';
-#print "<hr>AAAA $ai -->  ".$cmvm[$ai]['vmid']."<hr>";
+        print "$file <br>\n";
+$cmvm[$ai]['filename']=$file;
+$cmvm[$ai]['vmid']='';
+$cmvm[$ai]['processid']='';
+$cmvm[$ai]['starttime']='';
+$cmvm[$ai]['endtime']='';
 
 my $filelog=$hlock."".$file;
-#$ai++;
+$ai++;
 my $ij=0;
 open(OUTOAZ,"<$filelog");
 while(<OUTOAZ>)
@@ -667,135 +660,29 @@ while(<OUTOAZ>)
 my @l1=split(" ",$_);
 my @l2=split("from",$_);
 my @l3=split(" ",@l2[1]);
-my @l4=split(" ",@l3[0]);
 if($ij==0)
 {
-#print $_;
-$cmvm[$ai]{'starttime'} = "".$l1[0]." ".$l1[1];
-$cmvm[$ai]{'fromnodeip'} = "".$l4[0];
-$cmvm[$ai]{'tonodeip'} = "".$l3[2];
+print $_;
+print "<hr>";
+print " --> ".$l1[0]." ".$l1[1];
+print " --> ".$l3[2];
+print "<hr>";
+$cmvm[$ai]['starttime']=$l1[0]." ".$l1[1];
+#print "<hr>";
 ## for first line only
 }
-$cmvm[$ai]{'endtime'}=$l1[0]." ".$l1[1];
-##########################
-##########################
-
-
-my $starttimex = $cmvm[$ai]{'starttime'};
-my $endtimex   = $cmvm[$ai]{'endtime'};
-
-# Parse the timestamps
-my ($start_date, $start_time) = split(' ', $starttimex);
-my ($end_date, $end_time)     = split(' ', $endtimex);
-
-my ($start_year, $start_month, $start_day) = split('-', $start_date);
-my ($start_hour, $start_min, $start_sec)   = split(':', $start_time);
-
-my ($end_year, $end_month, $end_day)     = split('-', $end_date);
-my ($end_hour, $end_min, $end_sec)       = split(':', $end_time);
-
-# Calculate the difference
-my $seconds_diff =
-    ($end_sec - $start_sec) +
-    ($end_min - $start_min) * 60 +
-    ($end_hour - $start_hour) * 3600 +
-    ($end_day - $start_day) * 86400 +
-    ($end_month - $start_month) * 2629743 +    # Average number of seconds in a month
-    ($end_year - $start_year) * 31556926;     # Average number of seconds in a year
-
-# Calculate days and remaining seconds
-my $days = int($seconds_diff / 86400);
-$seconds_diff %= 86400;
-
-# Calculate hours, minutes, and seconds
-my $hours   = int($seconds_diff / 3600);
-my $minutes = int(($seconds_diff % 3600) / 60);
-my $seconds = $seconds_diff % 60;
-
-# Format the duration
-my $durationtocomplete = "";
-if ($days > 0) {
-    $durationtocomplete .= "$days day" . ($days > 1 ? "s " : " ");
-}
-$durationtocomplete .= sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
-$cmvm[$ai]{'duration'}=$durationtocomplete;
-#print "<hr>Duration to complete: $durationtocomplete\n";
-
-
-##########################
-##########################
+$cmvm[$ai]['endtime']=$l1[0]." ".$l1[1];
 
 $ij++;
 }
 close(OUTOAZ);
-$ai++;
+
 ## close check
     }
 ## close folder
 }
 closedir($dh);
-my $getsortby="endtime";
 
-if($in{'getsortby'} ne ""){$getsortby=$in{'getsortby'};}
-
-if($getsortby ne "")
-{
-@cmvm = sort {
-    my $cmp = $b->{$getsortby} cmp $a->{$getsortby};
-    if ($cmp == 0) {
-        $a->{'vmid'} <=> $b->{'vmid'};
-    } else {
-        $cmp;
-    }
-} @cmvm;
-}
-
-
-my $pop='<script>
-function popupboxfull(x,h1,w1)
-{
-var w=screen.width;var h=screen.height;
-var livephonewin=window.open(x, "_blank", "toolbar=no, scrollbars=yes, resizable=yes, top="+h+", left="+w+", width="+w1+", height="+h1+"");
-}
-
-</script>
-';
-
-print $pop;
-
-print "<table border=1>";
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=processid\">PROCESS ID</a></td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=vmid\">VMID</a></td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=fromnodeip\">FROM NODE IP</a></td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=tonodeip\">TO NODE IP</a></td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=starttime\">START TIME</a></td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=endtime\">END TIME</a></td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center><a href=\"index.cgi?fun=datasyncdonestatus&getsortby=duration\">DURATION</a></td>";
-print "</tr>";
-
-for($ai=0;$ai<@cmvm;$ai++)
-{
-
-my $checkvmid=$cmvm[$ai]{'vmid'};
-my $fromnodeip=$cmvm[$ai]{'fromnodeip'};
-my $tonodeip=$cmvm[$ai]{'tonodeip'};
-my $starttime=$cmvm[$ai]{'starttime'};
-my $endtime=$cmvm[$ai]{'endtime'};
-my $uidx=$cmvm[$ai]{'processid'};
-my $duration=$cmvm[$ai]{'duration'};
-
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"#\" onClick=\"popupboxfull('completelog.cgi?uidx=".$uidx."&vmid=".$checkvmid."&fromnodeip=".$fromnodeip."&tonodeip=".$tonodeip."&starttime=".$starttime."&endtime=".$endtime."&duration=".$duration."&showlivelog=1',800,800);return false;\">".$uidx."</a></td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$checkvmid."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$fromnodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$tonodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$starttime."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$endtime."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$duration."</td>";
-print "</tr>";
-}
-print "</table>";
 
 
 ### COMPLETE LIST IF OVER
