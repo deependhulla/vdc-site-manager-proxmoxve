@@ -305,342 +305,36 @@ print " <a href=\"#\" target=\"_blank\" style=\"display: inline-block; padding: 
 
 ##########clustervmlist over####################
 
-###rgvmlistsave
-##############################
-if($fun eq "rgvmlistsave" && $in{'gid'} ne "")
-{
 
-my $newgroupidx=$in{'gid'};
-my @recgroup=();
-my $ai=0;
-my $filelog = "/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
-open(OUTOAZ,"<$filelog");
-while(<OUTOAZ>)
-{
-my $fline=$_;
-$fline=~ s/\n/""/eg;
-my @l1=split("=",$fline);
-if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
-if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];}
-if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
-if($l1[0] eq "SYNCACTIVE"){ $recgroup[$ai]{'cronactive'}=$l1[1];}
-if($l1[0] eq "CRONTABCONFIG"){ $recgroup[$ai]{'crontime'}=$l1[1];}
-if($l1[0] eq "EMAILUPDATES"){ $recgroup[$ai]{'emailupdates'}=$l1[1];}
-#print $_;
-}
-close(OUTOAZ);
-my $vmlistnew="";
-
-open(OUTOAZ,">$filelog");
-print OUTOAZ "CREATEDON=".$recgroup[$ai]{'createdon'}."\n";
-print OUTOAZ "GROUPNAME=".$recgroup[$ai]{'groupname'}."\n";
-print OUTOAZ "SYNCACTIVE=".$recgroup[$ai]{'cronactive'}."\n";
-print OUTOAZ "CRONTABCONFIG=".$recgroup[$ai]{'crontime'}."\n";
-print OUTOAZ "EMAILUPDATES=".$recgroup[$ai]{'emailupdates'}."\n";
-print OUTOAZ "VMLIST=".$vmlistnew."\n";
-close(OUTOAZ);
-
-print "<h4>Resource Group :[GID ".$in{'gid'}."] : VM List updated successfully.</h4>";
-
-## updated rgvmlistsave  over
-}
-
-
-###rgvmlistsave
-##############################
-##############################
-if($fun eq "rgeditupdate" && $in{'gid'} ne "")
-{
-
-my $newgroupidx=$in{'gid'};
-my @recgroup=();
-my $ai=0;
-my $filelog = "/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
-open(OUTOAZ,"<$filelog");
-while(<OUTOAZ>)
-{
-my $fline=$_;
-$fline=~ s/\n/""/eg;
-my @l1=split("=",$fline);
-if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
-if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];}
-if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
-if($l1[0] eq "SYNCACTIVE"){ $recgroup[$ai]{'cronactive'}=$l1[1];}
-if($l1[0] eq "CRONTABCONFIG"){ $recgroup[$ai]{'crontime'}=$l1[1];}
-if($l1[0] eq "EMAILUPDATES"){ $recgroup[$ai]{'emailupdates'}=$l1[1];}
-#print $_;
-}
-close(OUTOAZ);
-
-open(OUTOAZ,">$filelog");
-print OUTOAZ "CREATEDON=".$recgroup[$ai]{'createdon'}."\n";
-print OUTOAZ "GROUPNAME=".$in{'groupname'}."\n";
-print OUTOAZ "SYNCACTIVE=".$in{'crontab_schedule_active'}."\n";
-print OUTOAZ "CRONTABCONFIG=".$in{'crontab_schedule_value'}."\n";
-print OUTOAZ "EMAILUPDATES=".$in{'email_update'}."\n";
-print OUTOAZ "VMLIST=".$recgroup[$ai]{'vmlist'}."\n";
-close(OUTOAZ);
-
-print "<h4>Resource Group :[GID ".$in{'gid'}."] : Updated successfully.</h4>";
-
-## updated rgedit  over
-}
-##############################
-##############################
 
 ##############################
 if($fun eq "rgedit" && $in{'gid'} ne "")
 {
 print "<h4>Resource Group :[GID ".$in{'gid'}."] : Update Name & Schedule Process.</h4>";
 my $newgroupidx=$in{'gid'};
-
 my @recgroup=();
 my $ai=0;
 my $filelog = "/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
 open(OUTOAZ,"<$filelog");
 while(<OUTOAZ>)
 {
-my $fline=$_;
-$fline=~ s/\n/""/eg;
-my @l1=split("=",$fline);
+my @l1=split("=",$_);
 if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
-if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];}
+if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'createdon'}=$l1[1];}
 if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
 if($l1[0] eq "SYNCACTIVE"){ $recgroup[$ai]{'cronactive'}=$l1[1];}
 if($l1[0] eq "CRONTABCONFIG"){ $recgroup[$ai]{'crontime'}=$l1[1];}
 if($l1[0] eq "EMAILUPDATES"){ $recgroup[$ai]{'emailupdates'}=$l1[1];}
-#print $_;
+print $_;
 }
 close(OUTOAZ);
 
-print  "</center><form name=\"myform\" id=\"myform\" action =\"index.cgi\">";
-print "<input type=\"hidden\" name=\"gid\" id=\"gid\" value=\"".$in{'gid'}."\">";
-print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"rgeditupdate\">";
-print "Group Name : <input type=\"text\" name=\"groupname\" id=\"groupname\" value=\"".$recgroup[$ai]{'groupname'}."\">";
-
-if($recgroup[$ai]{'crontime'} eq ""){$recgroup[$ai]{'crontime'}="0 */2 * * *";}
-my $cronbox="";
-for($c=0;$c<@cronvalue;$c++)
-{
-my $cronboxsel='';
-$cronbox=$cronbox."\n";
-if($recgroup[$ai]{'crontime'} eq $cronvalue[$c]){$cronboxsel='selected';}
-$cronbox=$cronbox."<option value=\"".$cronvalue[$c]."\" ".$cronboxsel.">".$crontitle[$c]."</option>";
-}
-
-if($recgroup[$ai]{'cronactive'} eq "ACTIVE"){$crontab_schedule_active_no='';$crontab_schedule_active_yes='selected';}
-if($recgroup[$ai]{'cronactive'} eq "DISABLED"){$crontab_schedule_active_no='selected';$crontab_schedule_active_yes='';}
-
-my $formdata="";
-$formdata='
-<br> <label for="crontab_schedule">Resource Group Data Sync:</label>
-  Schedule:  <select id="crontab_schedule_active" name="crontab_schedule_active">
-      <option value="DISABLED" '.$crontab_schedule_active_no.'>DISABLED</option>
-      <option value="ACTIVE" '.$crontab_schedule_active_yes.'>ENABLED</option>
-</select>
- for  <select id="crontab_schedule_value" name="crontab_schedule_value">'.$cronbox.'
-    </select>
-<!-- Email updates (optional) <input type="email" name="email_update" id="email_update" value="'.$recgroup[$ai]{'emailupdates'}.'">     -->
-    <input type="submit" value="Update Settings" style="background-color:skyblue">
-';
-print $formdata;
 
 
-print "</form>";
-
-
-# RG EDIT --form over####
+#####
 }
 #############################3
 
-#############################3
-#############################3
-#############################3
-
-##############################
-if($fun eq "rgvmupdate" && $in{'gid'} ne "")
-{
-
-my $newgroupidx=$in{'gid'};
-
-my @recgroup=();
-my $ai=0;
-my $filelog = "/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
-open(OUTOAZ,"<$filelog");
-while(<OUTOAZ>)
-{
-my $fline=$_;
-$fline=~ s/\n/""/eg;
-my @l1=split("=",$fline);
-if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
-if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];}
-if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
-if($l1[0] eq "SYNCACTIVE"){ $recgroup[$ai]{'cronactive'}=$l1[1];}
-if($l1[0] eq "CRONTABCONFIG"){ $recgroup[$ai]{'crontime'}=$l1[1];}
-if($l1[0] eq "EMAILUPDATES"){ $recgroup[$ai]{'emailupdates'}=$l1[1];}
-#print $_;
-}
-close(OUTOAZ);
-print "<h4>Resource Group :[GID ".$in{'gid'}."] ".$recgroup[$ai]{'groupname'}." : Update VM List</h4>";
-print "VM: ".$recgroup[$ai]{'vmlist'};
-print  "<form name=\"myform\" id=\"myform\" action =\"index.cgi\">";
-print "<input type=\"hidden\" name=\"gid\" id=\"gid\" value=\"".$in{'gid'}."\">";
-print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"rgvmlistsave\">";
-
-##########iGEN VM LIST -- START###############
-##########iGEN VM LIST -- START###############
-##########iGEN VM LIST -- START###############
-##########iGEN VM LIST -- START###############
-##########iGEN VM LIST -- START###############
-
-##############################
-#print "<h4><i>List of VMs in Clusters to Add in Group</i></h4>";
-#$siteinfonodeip[$si][$ri]
-for($si=0;$si<@siteinfo;$si++)
-{
-print "<h4>List of VMs in Cluster-Site : ".$siteinfo[$si]." :  ".$siteinfoname[$si]."</h4>\n";
-my $nodesship=$siteinfonodeip[$si][0];
-## get Site VM Info
-##my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-list-of-vm-in-cluster.pl";
-my $cmdx="ssh root@".$nodesship." /usr/local/src/vdcsitemanager-tools/nodes-tools/get-disk-name-of-all-vm.pl";
-#print "$cmdx";
-my $csvdata=`$cmdx`;
-if($si!=0){$csvline=$csvline."\n\n";}
-print "<table border='1'>\n";
-my @rows = split(/\n/, $csvdata);
-my $rx=0;my $tcolx=0;
-my $tbgcol="#FFFAF0";
-foreach my $row (@rows) {
-my $showallow=1;
-if($rx==0){
-$csvline=$csvline."\"SITE\",";
-}
-else
-{
-
-$csvline=$csvline."\"".$siteinfoname[$si]."\",";
-}
-    $row =~ s/"//g; # Remove quotes
-    my @columns = split(/,/, $row);
-if($rx==0){$tcolx=@columns;}$rx++;
-    print "<tr>\n";
-my $colx=0;
-my $vmid="";
-my $nodename="";
-my $vmname="";
-$tt++;
-foreach my $column (@columns) {
-$colx++;
-my $columndata=$column;
-my $columndata1=$cephstorage.":";
-$columndata =~ s/$columndata1//g;
-if($colx==4){$vmid=$column;}
-if($colx==2){$nodename=$column;}
-if($colx==5){$vmname=$column;}
-if ($columndata =~ /:/) {
-## as there is another storage mapped
-$showallow=0;
-}
-if($colx==8){
-if($rx!=1)
-{
-my $columndata2=$columndata/1024;
-$columndata=$columndata2."GB";
-}
-}
-if($colx>8){
-if($rx==1)
-{
-my $columndata3=$columndata;
-$columndata3 =~ s/ /<br>/g;
-$columndata=$columndata3."";
-}
-}
-## Show Till name 
-if($colx<6)
-{
-print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>".$columndata."</td>\n";
-}
-my $columndata2=$columndata;
-
-if($rx!=1 && ( $colx==10 || $colx==12 || $colx==14 || $colx==16 || $colx==18 || $colx==20 || $colx==22 || $colx==24 || $colx==26 || $colx==28) ){
-my $xdisksize=$columndata2;
-if ($xdisksize =~ /^(\d+)([GMT])$/) {
-    my $xsize = $1;
-    my $xunit = $2;
-
-    if ($xunit eq 'T') {
-        $xsize *= 1024; # Convert TB to GB
-    }
-elsif ($xunit eq 'M') {
-        $xsize /= 1024; # Convert MB to GB
-    }
-        $columndata2=$xsize;
-}
-##$columndata2="XXX";
-}
-
-$csvline=$csvline.'"'.$columndata2.'",';
-    }
-#print $colx."xx --> $tcolx;\n";
-
-for(my $ci=$colx;$ci<$tcolx;$ci++)
-{
-$csvline=$csvline.'"-",';
-#print "<td style=\"border: 1px solid;background-color:".$tbgcol." !important\" align=center>-</tD>";
-}
-
-my $astart="";my $aend="";
-my $tbgcolvid=$tbgcol;
-$tbgcolvid='#cccccc';
-my $extracss="";
-my $columndata3="Action";
-if($rx!=1)
-{
-
-$tbgcolvid='#cccccc';
-#$extracss="text-decoration: underline;";
-$columndata3="Disabled";
-$columndata3="Disabled";
-if($showallow==1)
-{
-my $vmactivenow="";
-$tbgcolvid='#AFEEEE';
-$extracss="text-decoration: underline;";
-$columndata3="Manage";
-$columndata3="<input type=\"checkbox\" id=\"vm_id_".$vmid."\" name=\"vm_id_".$vmid."\" value=\"".$vmid."\" ".$vmactivenow." >";
-
-#$astart="<a href=\"index.cgi?fun=datasyncnow&vmid=".$vmid."&nodename=".$nodename."&vmname=".$vmname."\">";$aend="</a>";
-}
-}
-print "<td style=\"border: 1px solid;".$extracss."background-color:".$tbgcolvid." !important\" align=center>".$astart.$columndata3.$aend."</td>\n";
-
-$tbgcol="#FAF0E6";
-
-
-$csvline=$csvline."\n";
-
-print "</tr>\n";
-}
-print "</table>";
-}
-##########iGEN VM LIST -- END###############
-##########iGEN VM LIST -- END###############
-##########iGEN VM LIST -- END###############
-##########iGEN VM LIST -- END###############
- print " <input type=\"submit\" value=\"Update VM List\" style=\"background-color:skyblue\">";
-
-
-print "</form>";
-
-
-# RG VM LIST  --form over####
-}
-#############################3
-
-#############################3
-#############################3
-#############################3
 
 ##############################
 if($fun eq "datavmlist")
@@ -684,10 +378,7 @@ my $ij=0;
 open(OUTOAZ,"<$filelog");
 while(<OUTOAZ>)
 {
-my $fline=$_;
-$fline=~ s/\n/""/eg;
-
-my @l1=split("=",$fline);
+my @l1=split("=",$_);
 if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
 if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'createdon'}=$l1[1];}
 if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
@@ -746,13 +437,7 @@ print "<tr>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"index.cgi?fun=rgedit&gid=".$gid."&\">".$gid."</a></td>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$groupname."</td>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"index.cgi?fun=rgvmupdate&gid=".$gid."&\">".$vmcount."</a></td>";
-my $crontimex=$crontime;
-for($c=0;$c<@cronvalue;$c++)
-{
-if($crontime eq $cronvalue[$c]){$crontimex=$crontitle[$c];}
-}
-
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$crontimex."</td>";
+print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$crontime."</td>";
 print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$cronactive."</td>";
 print "</tr>";
 }
