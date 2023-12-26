@@ -317,14 +317,86 @@ print "Active VM Data Sync Schedule List.: Comming soon";
 ##############################
 if($fun eq "resourcegroup")
 {
+if($in{'subfun'} eq "")
+{
 print "<h4>Resource Group List </h4><br>";
-
-#print "<center>";
-#print "<a href=\"index.cgi?fun=resourcegroup&subfun=&\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">List of Resource-Group</a>";  
-#print "&nbsp;&nbsp;&nbsp;";
-#print " | &nbsp;&nbsp;&nbsp;";
 print "<a href=\"index.cgi?fun=resourcegroup&subfun=create\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;\">Create Resource-Group</a>";  
+}
 
+
+if($in{'subfun'} eq "create" || $in{'subfun'} eq "createsave")
+{
+my $lastgroupid=0;
+my $lastgroupidx="";
+if ( -e '/etc/webmin/vdcsitemanager/resource-group/lastgroupid.txt' ) {
+## file is there 
+}
+else
+{
+open(OUTOAZ,">/etc/webmin/vdcsitemanager/resource-group/lastgroupid.txt");
+print OUTOAZ "1";
+close(OUTOAZ);
+}
+
+open(OUTOAZ,"</etc/webmin/vdcsitemanager/resource-group/lastgroupid.txt");
+while(<OUTOAZ>)
+{
+$lastgroupidx=$lastgroupidx.$_;
+}
+close(OUTOAZ);
+
+#print "aa -> $lastgroupidx";
+$lastgroupidx=~ s/\n/""/eg;
+$lastgroupidx=~ s/\r/""/eg;
+$lastgroupidx=~ s/\0/""/eg;
+$lastgroupidx=~ s/ /""/eg;
+$lastgroupid=int($lastgroupidx);
+my $newgroupid=$lastgroupid + 1;
+if($in{'subfun'} eq "createsave")
+{
+my $gn=$in{'groupname'};
+$gn=~ s/\n/""/eg;
+$gn=~ s/\r/""/eg;
+$gn=~ s/\0/""/eg;
+$gn=~ s/\t/""/eg;
+my $newgroupidx=$newgroupid;
+if($newgroupid<1000){$newgroupidx="0".$newgroupid;}
+if($newgroupid<100){$newgroupidx="00".$newgroupid;}
+if($newgroupid<10){$newgroupidx="000".$newgroupid;}
+my $filex="/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
+my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
+my $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
+open(OUTOAZ,">$filex");
+print OUTOAZ "CREATEDON=".$curdatetime;
+print OUTOAZ "\n";
+print OUTOAZ "GROUPNAME=".$gn;
+print OUTOAZ "\n";
+close(OUTOAZ);
+
+open(OUTOAZ,">/etc/webmin/vdcsitemanager/resource-group/lastgroupid.txt");
+print OUTOAZ $newgroupid;
+close(OUTOAZ);
+
+print "Group [GID:$newgroupid] Created : <b>".$gn."</b>";
+
+}
+if($in{'subfun'} eq "create")
+{
+my $groupnamex='Group '.$newgroupid;
+print "<h4>Create a Resource Group </h4><br>";
+print "<form name=\"myform\" id=\"myform\" action =\"index.cgi\">";
+print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"resourcegroup\">";
+print "<input type=\"hidden\" name=\"subfun\" id=\"subfun\" value=\"createsave\">";
+print "Create First: New Groupname:<input type=\"text\" name=\"groupname\" id=\"groupname\" value=\"".$groupnamex."\"> &nbsp; ";
+
+print "<input type=\"submit\" value=\"Create ResourceGroup\" style=\"background-color:skyblue\">";
+
+
+}
+
+
+##Create group --forum
+}
 
 ###i RESCOURCE GROUP SECTION OVER##
 }
