@@ -406,130 +406,6 @@ print "<h4>Resource Group :[GID ".$in{'gid'}."] : Updated successfully.</h4>";
 ##############################
 ##############################
 
-if($fun eq "rgsyncnow" && $in{'gid'} ne "")
-{
-
-my $newgroupidx=$in{'gid'};
-
-my @recgroup=();
-my $ai=0;
-my $filelog = "/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
-my @vrows;
-open(OUTOAZ,"<$filelog");
-while(<OUTOAZ>)
-{
-my $fline=$_;
-$fline=~ s/\n/""/eg;
-my @l1=split("=",$fline);
-if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
-if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];
-@vrows = split(/,/, $l1[1]);
-}
-if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
-if($l1[0] eq "SYNCACTIVE"){ $recgroup[$ai]{'cronactive'}=$l1[1];}
-if($l1[0] eq "CRONTABCONFIG"){ $recgroup[$ai]{'crontime'}=$l1[1];}
-if($l1[0] eq "EMAILUPDATES"){ $recgroup[$ai]{'emailupdates'}=$l1[1];}
-#print $_;
-}
-close(OUTOAZ);
-my $vxmax=@vrows;
-my $vxdone=0;
-my $pop='<script>
-function popupboxfull(x,h1,w1)
-{
-var w=screen.width;var h=screen.height;
-var livephonewin=window.open(x, "_blank", "toolbar=no, scrollbars=yes, resizable=yes, top="+h+", left="+w+", width="+w1+", height="+h1+"");
-}
-
-</script>
-';
-
-print $pop;
-
-for(my $vi=0; $vi<@vrows;$vi++)
-{
-$checkvmid=$vrows[$vi];
-my ($sec, $min, $hour, $mday, $mon, $year) = localtime();$year += 1900;$mon += 1;
-my $curdatetime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
-
-my $cmdstart='/usr/local/src/vdcsitemanager-tools/manager-tools/start-datasync-per-vmid.pl '.$checkvmid;
-if($in{'mactive'} eq "SYNC-STOP"){$cmdstart=$cmdstart." activate stop";}
-if($in{'mactive'} eq "SYNC-START"){$cmdstart=$cmdstart." activate start";}
-
-#print "<hr> $cmdstart  <hr>";
-
-my $hlock="/var/vdcsitemanager/nodes-lock/".$checkvmid."-datasync.lock";
-#print $hlock."<hr>";
-if (-e $hlock) {
-$lockvm=1;
-}
-if($lockvm==0)
-{
-if($vxdone==0)
-{
-print "<table border=1>";
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>PROCESS ID</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>VMID</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>FROM NODE IP</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>TO NODE IP</td>";
-print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align=center>START TIME</td>";
-print "</tr>";
-}
-##DEEPEN COMMENT TO PLAN FOR TEST
-###my $cmdxout=`$cmdstart`;
-print "<hr> $cmdstart  <hr>";
-
-my $uidx="";
-my $fromnodeip="";
-my $tonodeip="";
-my $starttime="";
-if (-e $hlock) {
-
-open(OUTOAZ,"<$hlock");
-while(<OUTOAZ>)
-{
-#    print "".$curdatetime." ".$uidx." ";
-#$print $_;
-my $linex=$_;
-$linex=~ s/\n/""/eg;
-$linex=~ s/\r/""/eg;
-$linex=~ s/\t/""/eg;
-$linex=~ s/\0/""/eg;
-my @lx = split(/=/, $linex);
-if($lx[0] eq "UIDX"){$uidx=$lx[1];}
-if($lx[0] eq "FROMNODEIP"){$fromnodeip=$lx[1];}
-if($lx[0] eq "TONODEIP"){$tonodeip=$lx[1];}
-if($lx[0] eq "STARTTIME"){$starttime=$lx[1];}
-}
-close(OUTOAZ);
-}
-print "<tr>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center><a href=\"#\" onClick=\"popupboxfull('livelog.cgi?uidx=".$uidx."&vmid=".$checkvmid."&fromnodeip=".$fromnodeip."&tonodeip=".$tonodeip."&starttime=".$starttime."&showlivelog=1',800,800);return false;\">".$uidx."</a></td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$checkvmid."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$fromnodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$tonodeip."</td>";
-print "<td style=\"border: 1px solid;background-color:#cceecc !important\" align=center>".$starttime."</td>";
-print "</tr>";
-
-
-$vxdone++;
-#print "<strong><font color=green> Manual Activity started as on ".$curdatetime."</font></strong><br>";
-}
-
-#### for loop per VM over
-}
-
-if($vxdone!=0)
-{
-print "</table>";
-}
-print "<h4>Resource Group :[GID ".$in{'gid'}."] ".$recgroup[$ai]{'groupname'}." <br> Manually DataSync Triggered for $vxdone of $vxmax VMs.</h4>";
-
-}
-##### RSYNC MANUAL DATA SYNC OVER
-
-
 ##############################
 if($fun eq "rgedit" && $in{'gid'} ne "")
 {
@@ -586,35 +462,9 @@ $formdata='
     <input type="submit" value="Update Settings" style="background-color:skyblue">
 ';
 print $formdata;
-print "</form><hr>";
 
 
-print '<script>
-function fxnow()
-{
-if(confirm(\'Are you sure you want to trigger Manual\'))
-{
-document.myform3.submit();
-}
-}
-</script>
-';
-print  "<form name=\"myform3\" id=\"myform3\" action =\"index.cgi\">";
-print "<input type=\"hidden\" name=\"gid\" id=\"gid\" value=\"".$in{'gid'}."\">";
-print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"rgsyncnow\">";
-print '
- <label for="crontab_schedule">MANUAL SYNC VM DATA:</label>
-  <select id="mactive" name="mactive">
-      <option value="ONLYSYNC" >Only Sync Live (NO MOVE and VMs STATUS REMAIN UNCHANGE )</option>
-      <option value="SYNC-STOP" >Sync Live then SHUTDOWN with final-sync and MOVE to another Cluster and keep it SHUTDOWN)</option>
-      <option value="SYNC-START" >Sync Live then SHUTDOWN with final-sync and MOVE to another Cluster and START VMs on another Cluster)</option>
-</select>
-    <input type="button" value="Manual Activate" style="background-color:pink" onClick="fxnow();return false;">
-	</form>
-';
-
-
-
+print "</form>";
 
 
 # RG EDIT --form over####
