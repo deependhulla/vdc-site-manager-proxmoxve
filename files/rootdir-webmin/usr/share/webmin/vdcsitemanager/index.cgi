@@ -590,7 +590,7 @@ $formdata='
  for  <select id="crontab_schedule_value" name="crontab_schedule_value">'.$cronbox.'
     </select>
 <!-- Email updates (optional) <input type="email" name="email_update" id="email_update" value="'.$recgroup[$ai]{'emailupdates'}.'">     -->
-    <input type="submit" value="Update Settings" style="background-color:skyblue">
+    <input type="submit" value="Update GroupName & Settings" style="background-color:skyblue">
 ';
 print $formdata;
 print "</form><hr>";
