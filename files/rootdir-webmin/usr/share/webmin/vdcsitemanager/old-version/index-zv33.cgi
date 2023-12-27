@@ -445,7 +445,6 @@ var livephonewin=window.open(x, "_blank", "toolbar=no, scrollbars=yes, resizable
 ';
 
 print $pop;
-print "<h4>Resource Group :[GID ".$in{'gid'}."] ".$recgroup[$ai]{'groupname'}."</h4>"; 
 
 for(my $vi=0; $vi<@vrows;$vi++)
 {
@@ -478,8 +477,8 @@ print "<td style=\"border: 1px solid;background-color:#bbbbbb !important\" align
 print "</tr>";
 }
 ##DEEPEN COMMENT TO PLAN FOR TEST
-my $cmdxout=`$cmdstart`;
-#print "<hr> $cmdstart  <hr>";
+###my $cmdxout=`$cmdstart`;
+print "<hr> $cmdstart  <hr>";
 
 my $uidx="";
 my $fromnodeip="";
@@ -525,8 +524,7 @@ if($vxdone!=0)
 {
 print "</table>";
 }
-#print "<h4>Resource Group :[GID ".$in{'gid'}."] ".$recgroup[$ai]{'groupname'}.""; 
-print "<br><b> Manually DataSync Triggered for $vxdone of $vxmax VMs.</b>";
+print "<h4>Resource Group :[GID ".$in{'gid'}."] ".$recgroup[$ai]{'groupname'}." <br> Manually DataSync Triggered for $vxdone of $vxmax VMs.</h4>";
 
 }
 ##### RSYNC MANUAL DATA SYNC OVER
@@ -540,7 +538,6 @@ my $newgroupidx=$in{'gid'};
 
 my @recgroup=();
 my $ai=0;
-my @vrows;
 my $filelog = "/etc/webmin/vdcsitemanager/resource-group/activelist/".$newgroupidx."-rg-info.conf";
 open(OUTOAZ,"<$filelog");
 while(<OUTOAZ>)
@@ -549,9 +546,7 @@ my $fline=$_;
 $fline=~ s/\n/""/eg;
 my @l1=split("=",$fline);
 if($l1[0] eq "CREATEDON"){ $recgroup[$ai]{'createdon'}=$l1[1];}
-if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];
-@vrows = split(/,/, $l1[1]);
-}
+if($l1[0] eq "VMLIST"){ $recgroup[$ai]{'vmlist'}=$l1[1];}
 if($l1[0] eq "GROUPNAME"){ $recgroup[$ai]{'groupname'}=$l1[1];}
 if($l1[0] eq "SYNCACTIVE"){ $recgroup[$ai]{'cronactive'}=$l1[1];}
 if($l1[0] eq "CRONTABCONFIG"){ $recgroup[$ai]{'crontime'}=$l1[1];}
@@ -564,9 +559,7 @@ print  "</center><form name=\"myform\" id=\"myform\" action =\"index.cgi\">";
 print "<input type=\"hidden\" name=\"gid\" id=\"gid\" value=\"".$in{'gid'}."\">";
 print "<input type=\"hidden\" name=\"fun\" id=\"fun\" value=\"rgeditupdate\">";
 print "Group Name : <input type=\"text\" name=\"groupname\" id=\"groupname\" value=\"".$recgroup[$ai]{'groupname'}."\">";
-print "<br>";
-print "<br>";
-print "<b>Total ".@vrows." VMs: ".$recgroup[$ai]{'vmlist'}."<br></b>";
+
 if($recgroup[$ai]{'crontime'} eq ""){$recgroup[$ai]{'crontime'}="0 */2 * * *";}
 my $cronbox="";
 for($c=0;$c<@cronvalue;$c++)
