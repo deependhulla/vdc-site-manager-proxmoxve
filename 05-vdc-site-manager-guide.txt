@@ -15,6 +15,10 @@ echo "1" >  /etc/webmin/vdcsitemanager/ceph-erasure-code
 * Now setup one-time ssh-auto login to all site1 PVE & site2 PVE for autologin 
   from not only each other but also from this VDC VM.
   This for Inter Process and to trigger root process for data sync.
+Example
+ssh-copy-id root@192.168.30.112
+and check with ssh root@192.168.30.112 it should login auto
+
 -------------------------------------------------------------------------------
 
 * Login from All PVE Servers of Site1 Cluster to each server of Site2 Cluster PVE

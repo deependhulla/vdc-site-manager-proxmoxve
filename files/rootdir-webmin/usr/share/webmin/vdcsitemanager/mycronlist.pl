@@ -22,17 +22,17 @@ $cronvalue[$c]="0 */6 * * *";$crontitle[$c]="Every 6 hours";$c++;
 $cronvalue[$c]="0 */12 * * *";$crontitle[$c]="Every 12 hours";$c++;
 $cronvalue[$c]="0 */24 * * *";$crontitle[$c]="Every 24 hours";$c++;
 $cronvalue[$c]="0 1 * * 5";$crontitle[$c]="Every Fri @ 01:00";$c++;
-$cronvalue[$c]="0 1 * * 5";$crontitle[$c]="Every Fri @ 02:00";$c++;
-$cronvalue[$c]="0 1 * * 5";$crontitle[$c]="Every Fri @ 03:00";$c++;
-$cronvalue[$c]="0 1 * * 5";$crontitle[$c]="Every Fri @ 04:00";$c++;
+$cronvalue[$c]="0 2 * * 5";$crontitle[$c]="Every Fri @ 02:00";$c++;
+$cronvalue[$c]="0 3 * * 5";$crontitle[$c]="Every Fri @ 03:00";$c++;
+$cronvalue[$c]="0 4 * * 5";$crontitle[$c]="Every Fri @ 04:00";$c++;
 $cronvalue[$c]="0 1 * * 6";$crontitle[$c]="Every Sat @ 01:00";$c++;
-$cronvalue[$c]="0 1 * * 6";$crontitle[$c]="Every Sat @ 02:00";$c++;
-$cronvalue[$c]="0 1 * * 6";$crontitle[$c]="Every Sat @ 03:00";$c++;
-$cronvalue[$c]="0 1 * * 6";$crontitle[$c]="Every Sat @ 04:00";$c++;
+$cronvalue[$c]="0 2 * * 6";$crontitle[$c]="Every Sat @ 02:00";$c++;
+$cronvalue[$c]="0 3 * * 6";$crontitle[$c]="Every Sat @ 03:00";$c++;
+$cronvalue[$c]="0 4 * * 6";$crontitle[$c]="Every Sat @ 04:00";$c++;
 $cronvalue[$c]="0 1 * * 0";$crontitle[$c]="Every Sun @ 01:00";$c++;
-$cronvalue[$c]="0 1 * * 0";$crontitle[$c]="Every Sun @ 02:00";$c++;
-$cronvalue[$c]="0 1 * * 0";$crontitle[$c]="Every Sun @ 03:00";$c++;
-$cronvalue[$c]="0 1 * * 0";$crontitle[$c]="Every Sun @ 04:00";$c++;
+$cronvalue[$c]="0 2 * * 0";$crontitle[$c]="Every Sun @ 02:00";$c++;
+$cronvalue[$c]="0 3 * * 0";$crontitle[$c]="Every Sun @ 03:00";$c++;
+$cronvalue[$c]="0 4 * * 0";$crontitle[$c]="Every Sun @ 04:00";$c++;
 
 
 if($gett eq "value"){return @cronvalue;}
