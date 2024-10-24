@@ -1,46 +1,69 @@
 
-Now Guide for VDC first Time Setup.
+# Guide for VDC First Time Setup
 
-* Make Sure both Cluster name are different ..when it was created..else would create problem.
-* Make sure the cephdata storage name is SAME on both Cluster..plus both are replication or erasure code 
+## Important Setup Requirements
+- Ensure both cluster names are different when created; otherwise, it will create problems.
+- Ensure the Ceph storage name is the SAME on both clusters, and that both are configured for either replication or erasure coding.
 
-## for Replication code sample
-echo "starceph" >  /etc/webmin/vdcsitemanager/ceph-storage-name
-echo "0" >  /etc/webmin/vdcsitemanager/ceph-erasure-code
-### for Erasure code sample
-echo "cephdata" >  /etc/webmin/vdcsitemanager/ceph-storage-name
-echo "1" >  /etc/webmin/vdcsitemanager/ceph-erasure-code
+## Configuration Examples
 
+### For Replication
+```bash
+echo "starceph" > /etc/webmin/vdcsitemanager/ceph-storage-name
+echo "0" > /etc/webmin/vdcsitemanager/ceph-erasure-code
+```
 
-* Now setup one-time ssh-auto login to all site1 PVE & site2 PVE for autologin 
-  from not only each other but also from this VDC VM.
-  This for Inter Process and to trigger root process for data sync.
-Example
+### For Erasure Coding
+```bash
+echo "cephdata" > /etc/webmin/vdcsitemanager/ceph-storage-name
+echo "1" > /etc/webmin/vdcsitemanager/ceph-erasure-code
+```
+
+## SSH Auto Login Setup
+- Set up one-time SSH auto-login to all Site1 PVE (DC)and Site2 PVE (DR) for automatic login between them and from the VDC VM. This is essential for inter-process communication and to trigger root processes for data synchronization.
+
+### Example Command
+```bash
 ssh-copy-id root@192.168.30.112
-and check with ssh root@192.168.30.112 it should login auto
+```
+- Test the SSH connection:
+```bash
+ssh root@192.168.30.112
+```
+It should log in automatically.
 
--------------------------------------------------------------------------------
+## Login Requirements
+- Login from all PVE servers of Site1 Cluster to each server of Site2 Cluster PVE.
+- Login from all PVE servers of Site2 Cluster to each server of Site1 Cluster PVE.
+- Login from VDC VM to each server of Site1 Cluster PVE.
+- Login from VDC VM to each server of Site2 Cluster PVE.
 
-* Login from All PVE Servers of Site1 Cluster to each server of Site2 Cluster PVE
-* Login from All PVE Servers of Site2 Cluster to each server of Site1 Cluster PVE
-* Login from VDC VM to each server of Site1 Cluster PVE
-* Login from VDC VM to each server of Site2 Cluster PVE
+### Example Commands
+```bash
+ssh-copy-id root@site1
+ssh-copy-id root@site2
+```
 
-#ssh-copy-id root@site1
-#ssh-copy-id root@site2
+## Site Configuration for VDC
+1. Navigate to the folder on the VDC VM:
+   ```bash
+   cd /usr/local/src/vdcsitemanager-tools/manager-tools/
+   ```
+2. Create the site configuration for VDC to manage all nodes via Webmin (this is a one-time activity).
 
-* Now go do folder on VDC VM : 
-cd /usr//local/src/vdcsitemanager-tools/manager-tools/
-we need to create the Site Config for VDC to manage all Node via Webmin , so one time activity below.
-
-## for Site1 any one ip
+### For Site1 (any one IP)
+```bash
 php onetime-site-build-for-manager.php 1 192.168.30.113
-## for site2 any one ip
+```
+
+### For Site2 (any one IP)
+```bash
 php onetime-site-build-for-manager.php 2 192.168.40.144
+```
 
-Now Login to Webmin of VDC (example 192.168.40.30)
-https://192.168.40.30:833
-login : manager
-password from : /usr/local/src/manager-vdcmanager-pass
-
+## Webmin Login
+- Now, log in to Webmin of VDC (example: 192.168.40.30):
+  - **URL**: https://192.168.40.30:833
+  - **Username**: manager
+  - **Password**: (found in) /usr/local/src/manager-vdcmanager-pass
 
