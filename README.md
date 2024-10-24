@@ -11,6 +11,8 @@ This tool is designed to synchronize and replicate data between two Proxmox VE c
 - **VM Synchronization:**
   - Allows virtual machines (VMs) to be synchronized from the DC cluster to the DR cluster over a secure, dedicated line or VPN.
   - Utilizes Ceph's RBD export with snapshots for backend data handling.
+  - Supports synchronization based on resource groups, enabling efficient management of multiple VMs.
+  - Syncing can be scheduled to automate the process, ensuring regular updates without manual intervention.
   - VMs remain visible and active on one cluster at a time, though the drive image is maintained on the other cluster for differential snapshot restoration.
 
 - **Disaster Recovery (DR) Readiness:**
