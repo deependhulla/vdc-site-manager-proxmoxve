@@ -399,12 +399,6 @@ print OUTOAZ "EMAILUPDATES=".$in{'email_update'}."\n";
 print OUTOAZ "VMLIST=".$recgroup[$ai]{'vmlist'}."\n";
 close(OUTOAZ);
 
-
-my $rgupdatenowcmd="/usr/share/webmin/vdcsitemanager/update-rgroup-cron.pl ".$in{'gid'}."";
-#print "\n $rgupdatenowcmd\n";
-my $cmdrgout="";
-$cmdrgout=`$rgupdatenowcmd`;
-
 print "<h4>Resource Group :[GID ".$in{'gid'}."] : Updated successfully.</h4>";
 
 ## updated rgedit  over
@@ -1176,7 +1170,7 @@ $formdata='
 <!-- Email updates (optional) <input type="email" name="email_update" id="email_update" value="'.$vmemailconfig.'">     -->
     <input type="submit" value="Update Data Sync Settings" style="background-color:skyblue">
 ';
-#print $formdata;
+print $formdata;
 print "</form><hr>";
 
 #################

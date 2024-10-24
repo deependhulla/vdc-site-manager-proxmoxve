@@ -10,12 +10,13 @@ sub getcronlist
 {
 $gett = $_[0]; 
 my @cronvalue=();my @crontitle=();my $c=0;
-#$cronvalue[$c]="*/10 * * * *";$crontitle[$c]="Every 10 minutes";$c++;
-#$cronvalue[$c]="*/20 * * * *";$crontitle[$c]="Every 20 minutes";$c++;
-#$cronvalue[$c]="*/30 * * * *";$crontitle[$c]="Every 30 minutes";$c++;
-#$cronvalue[$c]="*/40 * * * *";$crontitle[$c]="Every 40 minutes";$c++;
-#$cronvalue[$c]="*/50 * * * *";$crontitle[$c]="Every 50 minutes";$c++;
-#$cronvalue[$c]="0 * * * *";$crontitle[$c]="Every hour";$c++;
+$cronvalue[$c]="* * * * *";$crontitle[$c]="Every 1 minutes (Only testing)";$c++;
+$cronvalue[$c]="*/10 * * * *";$crontitle[$c]="Every 10 minutes (Only testing)";$c++;
+$cronvalue[$c]="*/20 * * * *";$crontitle[$c]="Every 20 minutes (Only testing)";$c++;
+$cronvalue[$c]="*/30 * * * *";$crontitle[$c]="Every 30 minutes";$c++;
+$cronvalue[$c]="*/40 * * * *";$crontitle[$c]="Every 40 minutes";$c++;
+$cronvalue[$c]="*/50 * * * *";$crontitle[$c]="Every 50 minutes";$c++;
+$cronvalue[$c]="0 * * * *";$crontitle[$c]="Every hour";$c++;
 $cronvalue[$c]="0 */2 * * *";$crontitle[$c]="Every 2 hours";$c++;
 $cronvalue[$c]="0 */4 * * *";$crontitle[$c]="Every 4 hours";$c++;
 $cronvalue[$c]="0 */6 * * *";$crontitle[$c]="Every 6 hours";$c++;
